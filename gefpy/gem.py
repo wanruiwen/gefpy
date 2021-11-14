@@ -1,9 +1,9 @@
 import gzip
 import pandas as pd
 import numpy as np
-import st_log    
-import time
-# import modin.pandas as pd
+import logging
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 """ modin can accelerate pandas 
 17  Cr1l	10367	16260	1
@@ -26,7 +26,7 @@ class Gem(object):
         self._init(file_path)
     
     def _init(self, file_path):
-        st_log.info('Gene file path is: \'{}\'.'.format(file_path))
+        logger.info('Gene file path is: \'{}\'.'.format(file_path))
         # geneID  x       y       UMICount/MIDCount
         if file_path.endswith('.gz'): self.fd = gzip.open(file_path, 'rb')
         else: self.fd = open(file_path, 'rb')
@@ -40,7 +40,7 @@ class Gem(object):
                 eoh = self.fd.tell() # get end-of-header position
             else:
                 break
-        st_log.info('Header info: {}.'.format(self.header))
+        logger.info('Header info: {}.'.format(self.header))
 
         # find start of expression matrix
         self.fd.seek(eoh)
@@ -65,12 +65,12 @@ class Gem(object):
         gene_ids = df['geneID'].unique()
         self.gene_id_dct = dict()
         self.origin = (df['x'].min(), df['y'].min())
-        st_log.info('Offset: {}.'.format(self.origin))
+        logger.info('Offset: {}.'.format(self.origin))
         df['x'] = df['x'] - df['x'].min()
         df['y'] = df['y'] - df['y'].min()
         max_x = df['x'].max() + 1
         max_y = df['y'].max() + 1
-        st_log.info('[GeneShape, geneIDCount]: {}, {}.'.format((max_y, max_x), len(gene_ids)))
+        logger.info('[GeneShape, geneIDCount]: {}, {}.'.format((max_y, max_x), len(gene_ids)))
 
         self.buffer_shape = (max_y, max_x)
         self.buffer = np.zeros(shape=self.buffer_shape, dtype=np.uint16)
@@ -81,7 +81,7 @@ class Gem(object):
             new_df = df.groupby(['x', 'y']).agg(UMI_sum=('MIDCount', 'sum')).reset_index()
         self.buffer[new_df['y'], new_df['x']] = new_df['UMI_sum']
         
-        st_log.info('[ROI, geneIDCount]: {}, {}.'.format(self.roi, len(gene_ids)))
+        logger.info('[ROI, geneIDCount]: {}, {}.'.format(self.roi, len(gene_ids)))
 
     def get_geneExp(self, locs):
         dct_ = dict()

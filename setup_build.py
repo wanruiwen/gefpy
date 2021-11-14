@@ -86,8 +86,8 @@ class gefpy_build_ext(build_ext):
             settings['runtime_library_dirs'] = settings['library_dirs']
 
         def make_gef_cy_extension():
-            sources = [localpath('gefpy', 'gef_cy.pyx'), localpath('gefpy', 'H5Reader.cpp')]
-            return Extension('gefpy.gef_cy', sources, **settings)
+            sources = [localpath('gefpy', 'gef_bin_cy.pyx'), localpath('gefpy', 'H5Reader.cpp')]
+            return Extension('gefpy.gef_bin_cy', sources, **settings)
 
         return [make_gef_cy_extension()]
 
