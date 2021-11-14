@@ -1,0 +1,67 @@
+import tifffile
+import cv2 as cv
+import numpy as np
+
+
+inv_small = 0.000000000001
+
+class Polygen(object):
+    def __init__(self, points):
+        self.border = None
+        self.center = None
+        self.area = None
+        self._init(points)
+    
+    def _init(self, points):
+        points = cv.approxPolyDP(points, 0.01 * cv.arcLength(points, True), True)
+        self.border = np.squeeze(points)
+        mu = cv.moments(points, False)
+        m = (inv_small + mu['m00'])
+        self.center = (int(mu['m10'] / m), int(mu['m01'] / m))
+        self.area = cv.contourArea(points)
+
+
+class Mask(object):
+    def __init__(self, file_path):
+        self.polygens = None
+        self.region = None
+        self.count = None
+        self._init(file_path)
+
+    def _init(self, file_path):
+        mask = tifffile.imread(file_path)
+        st_log.info('Load \'{}\' completed.'.format(file_path))
+        mask = np.where(mask != 0, 1, 0).astype(np.uint8)
+        contours, _ = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+        self.polygens = list()
+        rects = list()
+        for i, c in enumerate(contours):
+            rect = cv.boundingRect(c)
+            rects.append([rect[0], rect[1], rect[0] + rect[2], rect[1] + rect[3]])
+            self.polygens.append(Polygen(c))
+        self.count = len(rects)
+        rects = np.array(rects)
+        xmin = np.min(rects[:, 0])
+        ymin = np.min(rects[:, 1])
+        xmax = np.max(rects[:, 2])
+        ymax = np.max(rects[:, 3])
+        self.region = (xmin, ymin, xmax, ymax)
+        st_log.info('[MaskShape, PolygenCount, RegionOfInterest]: {}, {}, {}.'.format(mask.shape[:2], self.count, self.region))
+    
+    def get_polygen_by_index(self, ind):
+        if ind < self.count: return self.polygens[ind]
+        else: return None
+    
+
+
+
+def main():
+    gem = Mask('/zfssz3/ST_BIGDATA/stereomics/PipelineTest/data/FP200000617TL_B6/5_mask/fov_stitched_transformed_mask.tif')
+    # cell = gem.get_polygen_by_index(10000)
+    # print(cell.area)
+    
+
+
+if __name__ == '__main__':
+    main()
+        
