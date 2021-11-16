@@ -2,8 +2,13 @@ import tifffile
 import cv2 as cv
 import numpy as np
 
+import logging
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 inv_small = 0.000000000001
+
 
 class Polygen(object):
     def __init__(self, points):
@@ -11,9 +16,9 @@ class Polygen(object):
         self.center = None
         self.area = None
         self._init(points)
-    
-    def _init(self, points):
-        points = cv.approxPolyDP(points, 0.01 * cv.arcLength(points, True), True)
+
+    def _init(self, points, points_len=16):
+        if len(points) > points_len:points = cv.approxPolyDP(points, 0.01 * cv.arcLength(points, True), True)
         self.border = np.squeeze(points)
         mu = cv.moments(points, False)
         m = (inv_small + mu['m00'])
@@ -30,7 +35,7 @@ class Mask(object):
 
     def _init(self, file_path):
         mask = tifffile.imread(file_path)
-        st_log.info('Load \'{}\' completed.'.format(file_path))
+        logger.info('Load \'{}\' completed.'.format(file_path))
         mask = np.where(mask != 0, 1, 0).astype(np.uint8)
         contours, _ = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         self.polygens = list()
@@ -46,22 +51,22 @@ class Mask(object):
         xmax = np.max(rects[:, 2])
         ymax = np.max(rects[:, 3])
         self.region = (xmin, ymin, xmax, ymax)
-        st_log.info('[MaskShape, PolygenCount, RegionOfInterest]: {}, {}, {}.'.format(mask.shape[:2], self.count, self.region))
-    
-    def get_polygen_by_index(self, ind):
-        if ind < self.count: return self.polygens[ind]
-        else: return None
-    
+        logger.info(
+            '[MaskShape, PolygenCount, RegionOfInterest]: {}, {}, {}.'.format(mask.shape[:2], self.count, self.region))
 
+    def get_polygen_by_index(self, ind):
+        if ind < self.count:
+            return self.polygens[ind]
+        else:
+            return None
 
 
 def main():
-    gem = Mask('/zfssz3/ST_BIGDATA/stereomics/PipelineTest/data/FP200000617TL_B6/5_mask/fov_stitched_transformed_mask.tif')
+    gem = Mask(
+        '/Users/huangzhibo/workitems/13.github/gefpy/test_data/FP200000617TL_B6_mask.tif')
     # cell = gem.get_polygen_by_index(10000)
     # print(cell.area)
-    
 
 
 if __name__ == '__main__':
     main()
-        

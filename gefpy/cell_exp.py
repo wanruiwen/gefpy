@@ -1,12 +1,13 @@
-from os import DirEntry
 import h5py
 from mask import Mask
 from gem import Gem
-from cell import Cell
 import numpy as np
 import cv2 as cv
-import pandas as pd
 import random
+
+import logging
+logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 __cell_types__ = ['cell0', 'cell1', 'cell2', 'cell3']
@@ -119,10 +120,12 @@ class CellExp(object):
 def main():
     # gem_file = '/jdfssz2/ST_BIGDATA/Stereomics/autoanalysis_backup/P20Z10200N0157/null/FP200000617TL_B6_web_2_backup/result/FP200000617TL_B6_web_2/02.alignment/GetExp/barcode_gene_exp.txt'
     # mask_file = '/zfssz3/ST_BIGDATA/stereomics/PipelineTest/data/FP200000617TL_B6/7_result/FP200000617TL_B6_mask.tif'
-    gem_file = 'test_data/barCode.txt'
-    mask_file = 'test_data/mask.tif'
+    gem_file = '../test_data/barCode.txt'
+    mask_file = '../test_data/mask.tif'
+    # gem_file = '/Users/huangzhibo/workitems/13.github/gefpy/test_data/barcode_gene_exp.txt'
+    # mask_file = '../test_data/FP200000617TL_B6_mask.tif'
     ce = CellExp(gem_file, mask_file)
-    ce.write('./demo.gef')
+    ce.write('../test_data/FP200000617TL_B6.gef')
 
 
 if __name__ == '__main__':

@@ -1,3 +1,4 @@
+import h5py
 import gzip
 import pandas as pd
 import numpy as np
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 
-class Gem(object):
+class GefExp(object):
     def __init__(self, file_path, roi=None):
         self.header_count = 0
         self.header = None
