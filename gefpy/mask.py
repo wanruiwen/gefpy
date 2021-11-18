@@ -29,9 +29,10 @@ class Polygen(object):
         if self.border.shape[0] == 1:
             # logger.info("self.border 1: {}".format(self.center))
             self.center = (self.border[0][0], self.border[0][1])
-            # logger.info("self.border 2: {}".format(self.center))
         elif self.border.shape[0] == 2:
             self.center = ((self.border[0][0] + self.border[1][0])/2.0, (self.border[0][1] + self.border[1][1])/2.0)
+            logger.info("self.border 2: {}".format(self.center[0]))
+            print(self.border)
 
         self.area = cv.contourArea(points)
 
@@ -49,20 +50,20 @@ class Mask(object):
         mask = np.where(mask != 0, 1, 0).astype(np.uint8)
         contours, _ = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
         self.polygens = list()
-        rects = list()
+        # rects = list()
         for i, c in enumerate(contours):
-            rect = cv.boundingRect(c)
-            rects.append([rect[0], rect[1], rect[0] + rect[2], rect[1] + rect[3]])
+            # rect = cv.boundingRect(c)
+            # rects.append([rect[0], rect[1], rect[0] + rect[2], rect[1] + rect[3]])
             self.polygens.append(Polygen(c))
-        self.count = len(rects)
-        rects = np.array(rects)
-        xmin = np.min(rects[:, 0])
-        ymin = np.min(rects[:, 1])
-        xmax = np.max(rects[:, 2])
-        ymax = np.max(rects[:, 3])
-        self.region = (xmin, ymin, xmax, ymax)
-        logger.info(
-            '[MaskShape, PolygenCount, RegionOfInterest]: {}, {}, {}.'.format(mask.shape[:2], self.count, self.region))
+        # self.count = len(rects)
+        # rects = np.array(rects)
+        # xmin = np.min(rects[:, 0])
+        # ymin = np.min(rects[:, 1])
+        # xmax = np.max(rects[:, 2])
+        # ymax = np.max(rects[:, 3])
+        # self.region = (xmin, ymin, xmax, ymax)
+        # logger.info(
+        #     '[MaskShape, PolygenCount, RegionOfInterest]: {}, {}, {}.'.format(mask.shape[:2], self.count, self.region))
 
     def get_polygen_by_index(self, ind):
         if ind < self.count:

@@ -112,9 +112,9 @@ void CellExpWriter::storeCellBorder(char* borderPath, unsigned int size) {
     dims[2] = 2;
 
     hid_t dataspace_id = H5Screate_simple(3, dims, NULL);
-    hid_t dataset_id = H5Dcreate(m_file_id, "cellBin/cellBorder", H5T_STD_U8LE, dataspace_id, H5P_DEFAULT,
+    hid_t dataset_id = H5Dcreate(m_file_id, "cellBin/cellBorder", H5T_STD_I8LE, dataspace_id, H5P_DEFAULT,
                                  H5P_DEFAULT, H5P_DEFAULT);
-    H5Dwrite(dataset_id, H5T_STD_U8LE, H5S_ALL, H5S_ALL, H5P_DEFAULT, borderPath);
+    H5Dwrite(dataset_id, H5T_STD_I8LE, H5S_ALL, H5S_ALL, H5P_DEFAULT, borderPath);
     H5Sclose(dataspace_id);
     H5Dclose(dataset_id);
 }
@@ -246,10 +246,10 @@ void CellExpWriter::setGeneExpMap(const string &inPath){
     unsigned long long xy_bin;
     for (int i = 0; i < gene_exp.getExpLen(); ++i) {
         CellExpData cellExpData = {(unsigned short)gene_index[i], (unsigned short)expData[i].cnt};
-//        xy_bin = expData[i].x - gene_exp.minX;
-//        xy_bin = xy_bin << 32 | (expData[i].y - gene_exp.minY);
-        xy_bin = expData[i].x;
-        xy_bin = xy_bin << 32 | expData[i].y;
+        xy_bin = expData[i].x - gene_exp.minX;
+        xy_bin = xy_bin << 32 | (expData[i].y - gene_exp.minY);
+//        xy_bin = expData[i].x;
+//        xy_bin = xy_bin << 32 | expData[i].y;
 
         auto iter = gene_exp_map.find(xy_bin);
         if(iter != gene_exp_map.end()){

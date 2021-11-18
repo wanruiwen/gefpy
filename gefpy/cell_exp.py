@@ -1,6 +1,7 @@
 import h5py
 from mask import Mask
 import numpy as np
+import pandas as pd
 import cv2 as cv
 from gefpy.cell_exp_cy import CellExpW
 
@@ -51,14 +52,13 @@ class CellExpWriterPy(object):
 
             c_bin = self.cell_bin(p.border)
             self.cell_exp_writer.add_cell_bin(c_bin, len(c_bin))
-        print("init done ")
-    
+
     def cell_bin(self, border):
         nap = np.array(border)
         cx = nap[:, 0]
         cy = nap[:, 1]
         x0, y0, x1, y1 = [np.min(cx), np.min(cy), np.max(cx), np.max(cy)]
-        w, h = [x1 - x0, y1 - y0]
+        w, h = [x1 - x0 + 1, y1 - y0 + 1]
         arr = np.zeros((h, w), dtype=np.uint8)
         nap[:, 0] -= x0
         nap[:, 1] -= y0
@@ -85,20 +85,38 @@ class CellExpWriterPy(object):
         logger.info('Gef write completed : \'{}\''.format(self.out_file))
 
 
-def main():
-    # gem_file = '/jdfssz2/ST_BIGDATA/Stereomics/autoanalysis_backup/P20Z10200N0157/null/FP200000617TL_B6_web_2_backup/result/FP200000617TL_B6_web_2/02.alignment/GetExp/barcode_gene_exp.txt'
-    # mask_file = '/zfssz3/ST_BIGDATA/stereomics/PipelineTest/data/FP200000617TL_B6/7_result/FP200000617TL_B6_mask.tif'
-    # gem_file = '../test_data/barCode.txt'
-    # gef_file = '../test_data/barCode_gef/stereomics.h5'
-    mask_file = '../test_data/FP200000617TL_B6_mask.tif'
-    out_file = '../test_data/output_test5.gef'
-    gef_file = '../test_data/barcode_gene_exp_gef/stereomics.h5'
-    # gem_file = '/Users/huangzhibo/workitems/13.github/gefpy/test_data/barcode_gene_exp.txt'
-    # mask_file = '../test_data/FP200000617TL_B6_mask.tif'
-    ce = CellExpWriterPy(gef_file, mask_file, out_file)
-    ce.write()
+class CellExpReaderPy(object):
+    def __init__(self, filepath):
+        self.filepath = filepath
+        self.exp_len = 0
+        self.gene_num = 0
+        self.cell_num = 0
+        self.genes = None
+        self.cells = None
+        self.rows = None
+        self.cols = None
+        self.count = None
+        self.positions = None
+        self._init()
 
+    def _init(self):
+        with h5py.File(self.filepath, mode='r') as h5f:
+            self.genes = pd.DataFrame(h5f['cellBin']['geneList']).values
+            self.cols = pd.DataFrame(h5f['cellBin']['cellExp']['geneID']).values
+            self.count = pd.DataFrame(h5f['cellBin']['cellExp']['count']).values
+            self.exp_len = self.cols.shape[0]
+            self.gene_num = self.genes.shape[0]
+            self.positions  = pd.DataFrame(h5f['cellBin']['cell']['x', 'y']).values
+            self.cell_num = self.positions.shape[0]
 
-if __name__ == '__main__':
-    main()
-        
+            self.cells = np.array(self.positions[:,0], dtype='uint64')
+            self.cells = np.bitwise_or(
+                np.left_shift(self.cells, 32), self.positions[:,1])
+
+            gene_counts = pd.DataFrame(h5f['cellBin']['cell']['geneCount']).values
+            self.rows = np.zeros((self.exp_len , ), dtype='uint32')
+            exp_index = 0
+            for i, gene_c in enumerate(gene_counts):
+                for index in range(gene_c):
+                    self.rows[exp_index] = i
+                    exp_index += 1
