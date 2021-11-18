@@ -25,11 +25,8 @@ GeneExp::~GeneExp()
     H5Sclose(gene_dataspace_id);
 }
 
-
-Gene * GeneExp::getExpData() {
-    hid_t memtype;
-    hid_t attr;
-    unsigned long long cell_id;
+Gene * GeneExp::getGeneExpData() {
+    hid_t memtype, attr;
 
     memtype = H5Tcreate(H5T_COMPOUND, sizeof(Gene));
     m_status = H5Tinsert(memtype, "x", HOFFSET(Gene, x), H5T_NATIVE_UINT);
@@ -39,27 +36,25 @@ Gene * GeneExp::getExpData() {
     Gene *expData;
     expData = (Gene *) malloc(exp_len * sizeof(Gene));
     m_status = H5Dread(exp_dataset_id, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, expData);
+
+    attr = H5Aopen(exp_dataset_id, "minX", H5P_DEFAULT);
+    m_status = H5Aread(attr, H5T_NATIVE_UINT, &minX);
+    attr = H5Aopen(exp_dataset_id, "minY", H5P_DEFAULT);
+    m_status = H5Aread(attr, H5T_NATIVE_UINT, &minY);
+    attr = H5Aopen(exp_dataset_id, "maxX", H5P_DEFAULT);
+    m_status = H5Aread(attr, H5T_NATIVE_UINT, &maxX);
+    attr = H5Aopen(exp_dataset_id, "maxY", H5P_DEFAULT);
+    m_status = H5Aread(attr, H5T_NATIVE_UINT, &maxY);
+
+    H5Aclose(attr);
+    H5Tclose(memtype);
     return expData;
 }
 
 vector<unsigned long long> GeneExp::getExpData(unsigned int * cell_index, unsigned int * count)
 {
-//    time_t now = time(nullptr);
-//    char* dt = ctime(&now);
-//    printf("cpp_uniq_cell_index start = %s\n", dt);
-
-    hid_t memtype;
-    hid_t attr;
     unsigned long long uniq_cell_id;
-
-    memtype = H5Tcreate(H5T_COMPOUND, sizeof(Gene));
-    m_status = H5Tinsert(memtype, "x", HOFFSET(Gene, x), H5T_NATIVE_UINT);
-    m_status = H5Tinsert(memtype, "y", HOFFSET(Gene, y), H5T_NATIVE_UINT);
-    m_status = H5Tinsert(memtype, "count", HOFFSET(Gene, cnt), H5T_NATIVE_UINT);
-
-    Gene* expData;
-    expData = (Gene*)malloc(exp_len * sizeof(Gene));
-    m_status = H5Dread(exp_dataset_id, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, expData);
+    Gene* expData = getGeneExpData();
 
 //    now = time(nullptr);
 //    dt = ctime(&now);
@@ -109,29 +104,14 @@ vector<unsigned long long> GeneExp::getExpData(unsigned int * cell_index, unsign
 //    printf("index = %d\n", index);
 //    printf("* cell_index end = %s\n", dt);
 
-    // Read attribute of raw data
-    attr = H5Aopen(exp_dataset_id, "minX", H5P_DEFAULT);
-    // m_dataspace_id = H5Aget_space(attr);
-    // ndims = H5Sget_simple_extent_dims(space, dims, NULL);
-    m_status = H5Aread(attr, H5T_NATIVE_UINT, &minX);
-    attr = H5Aopen(exp_dataset_id, "minY", H5P_DEFAULT);
-    m_status = H5Aread(attr, H5T_NATIVE_UINT, &minY);
-    attr = H5Aopen(exp_dataset_id, "maxX", H5P_DEFAULT);
-    m_status = H5Aread(attr, H5T_NATIVE_UINT, &maxX);
-    attr = H5Aopen(exp_dataset_id, "maxY", H5P_DEFAULT);
-    m_status = H5Aread(attr, H5T_NATIVE_UINT, &maxY);
-
     if (expData != nullptr)
         free(expData);
 
-    H5Aclose(attr);
     kh_destroy(m64, h);
-    H5Tclose(memtype);
     return uniq_cells;
 }
 
-void GeneExp::getGeneData(unsigned int * gene_index, vector<string> & uniq_genes)
-{
+GenePos* GeneExp::getGenePos(){
     hid_t memtype;
     hid_t strtype;
 
@@ -144,11 +124,17 @@ void GeneExp::getGeneData(unsigned int * gene_index, vector<string> & uniq_genes
     m_status = H5Tinsert(memtype, "count", HOFFSET(GenePos, count), H5T_NATIVE_UINT);
 
     GenePos* idxData;
-    // cout<<"genes number: "<<idxLen<<endl;
     idxData = (GenePos*)malloc(gene_num * sizeof(GenePos));
     m_status = H5Dread(gene_dataset_id, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, idxData);
+    H5Tclose(strtype);
+    H5Tclose(memtype);
+    return idxData;
+}
 
-    // Write data line by line
+void GeneExp::getGeneData(unsigned int * gene_index, vector<string> & uniq_genes)
+{
+    GenePos* idxData = getGenePos();
+
     unsigned long long exp_len_index = 0;
     for (unsigned int i = 0; i < gene_num; ++i)
     {
@@ -165,9 +151,6 @@ void GeneExp::getGeneData(unsigned int * gene_index, vector<string> & uniq_genes
 
     if (idxData != nullptr)
         free(idxData);
-
-    H5Tclose(strtype);
-    H5Tclose(memtype);
 }
 
 unsigned long long int GeneExp::getExpLen() const {
@@ -209,8 +192,4 @@ void GeneExp::openGeneSpace() {
     gene_dataspace_id = H5Dget_space(gene_dataset_id);
     H5Sget_simple_extent_dims(gene_dataspace_id, dims, NULL);
     gene_num = dims[0];
-}
-
-vector<string> GeneExp::getGeneList() {
-//    return ;
 }

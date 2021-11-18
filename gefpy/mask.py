@@ -20,9 +20,19 @@ class Polygen(object):
     def _init(self, points, points_len=16):
         if len(points) > points_len:points = cv.approxPolyDP(points, 0.01 * cv.arcLength(points, True), True)
         self.border = np.squeeze(points)
+        if self.border.ndim == 1:
+            self.border = self.border.reshape((1, 2))
         mu = cv.moments(points, False)
         m = (inv_small + mu['m00'])
         self.center = (int(mu['m10'] / m), int(mu['m01'] / m))
+
+        if self.border.shape[0] == 1:
+            # logger.info("self.border 1: {}".format(self.center))
+            self.center = (self.border[0][0], self.border[0][1])
+            # logger.info("self.border 2: {}".format(self.center))
+        elif self.border.shape[0] == 2:
+            self.center = ((self.border[0][0] + self.border[1][0])/2.0, (self.border[0][1] + self.border[1][1])/2.0)
+
         self.area = cv.contourArea(points)
 
 

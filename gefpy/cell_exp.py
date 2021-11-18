@@ -1,71 +1,57 @@
 import h5py
 from mask import Mask
-from gem import Gem
 import numpy as np
 import cv2 as cv
-import random
+from gefpy.cell_exp_cy import CellExpW
 
 import logging
 logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 
-__cell_types__ = ['cell0', 'cell1', 'cell2', 'cell3']
+class CellExpWriterPy(object):
+    cell_exp_writer: CellExpW
 
+    def __init__(self, gef_file, mask_file, out_file):
+        self.exp_matrix = None
+        self.gef_file = gef_file
+        self.mask_file = mask_file
+        self.out_file = out_file
+        self.cell_exp_writer = None
 
-def add_dataset(group, dataset_name, names, dtypes, data):
-    datas = np.array(data)
-    h, w = datas.shape[:2]
-    ds_dt = np.dtype({'names': names,'formats': dtypes}) 
-    ddd = list()
-    for i in range(w):
-        ddd.append(datas[:, i])
-    rec_arr = np.rec.fromarrays(ddd, dtype=ds_dt)
-    try:
-        # normal dataset creation
-        group.create_dataset(dataset_name, data=rec_arr)
-    except Exception as e:
-        # if dataset already exists, replace it with new data
-        del group[dataset_name]
-        group.create_dataset(dataset_name, data=rec_arr)
-
-
-class CellExp(object):
-    def __init__(self, gem_file, mask_file):
-        self.cell_list = None
-        self.gene_list = None
-        self.cell_exp = None
-        self.cell_type = None
+        self.x = None
+        self.y = None
+        self.area = None
 
         self.i_mask = None
-        self.i_gem = None
-        self._init(gem_file, mask_file)
+        self._init()
     
-    def _init(self, gem_file, mask_file):
-        self.i_mask = Mask(mask_file)
-        self.i_gem = Gem(gem_file, roi=self.i_mask.region)
-        self.cell_list = list()
-        self.cell_border_list = list()
-        self.cell_type_list = list()
+    def _init(self):
+        self.cell_exp_writer = CellExpW(self.out_file)
+        self.cell_exp_writer.setGeneExpMap(self.gef_file)
+        self.set_exp_matrix(self.gef_file)
+        self.i_mask = Mask(self.mask_file)
+
+        self.cell_num = len(self.i_mask.polygens)
+
+        self.borders = np.zeros((self.cell_num, 16, 2), dtype=np.int8)
+        self.x = np.zeros((self.cell_num,), dtype=np.uint32)
+        self.y = np.zeros((self.cell_num,), dtype=np.uint32)
+        self.area = np.zeros((self.cell_num, ), dtype=np.uint16)
 
         for id, p in enumerate(self.i_mask.polygens):
-            c_border = self.cell_border(p.border)
+            b_len = 16 if len(p.border) >= 16 else len(p.border)
+            for i in range(b_len):
+                self.borders[id, i, 0] = p.border[i, 0] - p.center[0]
+                self.borders[id, i, 1] = p.border[i, 1] - p.center[1]
+
+            self.x[id] = p.center[0]
+            self.y[id] = p.center[1]
+            self.area[id] = p.area
+
             c_bin = self.cell_bin(p.border)
-            x, y = p.center
-            count = sum(c_bin.values())
-            cell_item = [x, y, p.area, len(c_bin), count]
-            self.cell_list.append(cell_item)
-            self.cell_border_list.append(c_border)
-            self.cell_type_list.append([random.choice(__cell_types__)])
-    
-    def cell_border(self, border, pt_count=None):
-        h, w = border.shape
-        b = np.zeros((16, 2), dtype=int)
-        if border is not None: 
-            b[:h, :] = border
-            return b
-        else: 
-            return None
+            self.cell_exp_writer.add_cell_bin(c_bin, len(c_bin))
+        print("init done ")
     
     def cell_bin(self, border):
         nap = np.array(border)
@@ -76,56 +62,41 @@ class CellExp(object):
         arr = np.zeros((h, w), dtype=np.uint8)
         nap[:, 0] -= x0
         nap[:, 1] -= y0
+
         arr = cv.fillPoly(arr, [nap], 1)
-        gem_mat = arr * self.i_gem.buffer[y0: y1, x0: x1]
+
+        gem_mat = arr * self.exp_matrix[y0: y1, x0: x1]
         y, x = np.where(gem_mat > 0)
-        ind = [[x[i] + x0, y[i] + y0] for i in range(len(y))]
-        return self.i_gem.get_geneExp(ind)
-    
-    def write(self, file_path):
-        with h5py.File(file_path, 'a') as h5f:
-            geneExp = h5f.require_group('geneExp')
-            wholeExp = h5f.require_group('wholeExp')
-            stat = h5f.require_group('stat')
-            Attributes = h5f.require_group('Attributes')
-            group = h5f.require_group('cellExp')
+        bin_index = np.zeros((len(y), 2), dtype=np.uint32)
+        for i in range(len(y)):
+            bin_index[i, 0] = x[i] + x0
+            bin_index[i, 1] = y[i] + y0
+        return bin_index
 
-            add_dataset(group, 'cell', ['x', 'y', 'area', 'geneCount', 'expCount'], ['i4'] * 5, self.cell_list)
+    def set_exp_matrix(self, gef_file):
+        with h5py.File(gef_file, mode='r') as h5f:
+            self.exp_matrix = h5f['wholeExp']['bin1']['MIDcount'].T
 
-            ss = np.array(self.cell_border_list, dtype=int)
-            
-            try:
-                # normal dataset creation
-                group.create_dataset('cellBorder', data=np.array(self.cell_border_list, dtype=int))
-            except Exception as e:
-                # if dataset already exists, replace it with new data
-                del group['cellBorder']
-                group.create_dataset('cellBorder', data=np.array(self.cell_border_list, dtype=int))
-
-            try:
-                # normal dataset creation
-                ds = group.create_dataset('cellType', data=np.array(self.cell_type_list, dtype='S32'))
-            except Exception as e:
-                # if dataset already exists, replace it with new data
-                del group['cellType']
-                ds = group.create_dataset('cellType', data=np.array(self.cell_type_list, dtype='S32'))
-            group['cellType'].attrs['cellTypeCount'] = len(__cell_types__)
-
-            # add_dataset(group, 'cellBorder', ['borderPath'], ['i4'], self.cell_border_list)
-
-
-
+    def write(self):
+        self.cell_exp_writer.storeGeneList()
+        self.cell_exp_writer.storeCellBorder(self.borders, self.cell_num)
+        self.cell_exp_writer.storeCell(self.x, self.y, self.area, self.cell_num)
+        self.cell_exp_writer.storeCellExp()
+        logger.info('Gef write completed : \'{}\''.format(self.out_file))
 
 
 def main():
     # gem_file = '/jdfssz2/ST_BIGDATA/Stereomics/autoanalysis_backup/P20Z10200N0157/null/FP200000617TL_B6_web_2_backup/result/FP200000617TL_B6_web_2/02.alignment/GetExp/barcode_gene_exp.txt'
     # mask_file = '/zfssz3/ST_BIGDATA/stereomics/PipelineTest/data/FP200000617TL_B6/7_result/FP200000617TL_B6_mask.tif'
-    gem_file = '../test_data/barCode.txt'
-    mask_file = '../test_data/mask.tif'
+    # gem_file = '../test_data/barCode.txt'
+    # gef_file = '../test_data/barCode_gef/stereomics.h5'
+    mask_file = '../test_data/FP200000617TL_B6_mask.tif'
+    out_file = '../test_data/output_test5.gef'
+    gef_file = '../test_data/barcode_gene_exp_gef/stereomics.h5'
     # gem_file = '/Users/huangzhibo/workitems/13.github/gefpy/test_data/barcode_gene_exp.txt'
     # mask_file = '../test_data/FP200000617TL_B6_mask.tif'
-    ce = CellExp(gem_file, mask_file)
-    ce.write('../test_data/FP200000617TL_B6.gef')
+    ce = CellExpWriterPy(gef_file, mask_file, out_file)
+    ce.write()
 
 
 if __name__ == '__main__':

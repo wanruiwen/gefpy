@@ -12,6 +12,7 @@ using namespace std;
 class GeneExp
 {
 public:
+    GeneExp();
     GeneExp(const string &filename, int bin_size);
 
     ~GeneExp();
@@ -23,12 +24,13 @@ public:
     unsigned long long getExpLen() const;
     unsigned int getGeneNum() const;
 
-    Gene * getExpData();
+
+    GenePos *getGenePos();
+    Gene * getGeneExpData();
     vector<unsigned long long> getExpData(unsigned int * cell_index, unsigned int * count);
 
     void getGeneData(unsigned int * gene_index, vector<string> & uniq_genes);
 
-    vector<string> getGeneList();
 
 private:
     hid_t m_file_id;
@@ -41,4 +43,6 @@ private:
 
     void openExpressionSpace();
     void openGeneSpace();
+
+
 };

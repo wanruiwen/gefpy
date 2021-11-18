@@ -4,16 +4,15 @@
 #include "hdf5.h"
 #include "GeneExp.h"
 
-typedef uint8_t byte;
-
 typedef struct
 {
     unsigned int x;
     unsigned int y;
     unsigned short area;
+    unsigned short expCount;
+    unsigned short dnbCount;
     unsigned short geneCount;
-    unsigned int expCount;
-    unsigned int geneExp;
+    unsigned int geneOffset;
 //    hdset_reg_ref_t geneExp;
 } CellData;
 
@@ -23,25 +22,43 @@ typedef struct
     unsigned short count;
 } CellExpData;
 
+struct GeneName
+{
+    GeneName(const char* g)
+    {
+        int i = 0;
+        while (g[i] != '\0')
+        {
+            name[i] = g[i];
+            ++i;
+        }
+    }
+    char name[32] = {0};
+};
+
 class CellExpWriter
 {
 public:
-    CellExpWriter(const string& inPath, const string& outPath);
+    CellExpWriter(const string& outPath);
     ~CellExpWriter();
 
-    void storeCell(unsigned int * x, unsigned int * y, unsigned short * area, int size);
+    unsigned int gene_num{};
 
-    bool storeCellExp();
+    void storeCell(unsigned int * x, unsigned int * y, unsigned short * area, unsigned int size);
 
-    bool storeCellBorder(byte borderPath[][16][2], int size);
+    void storeCellExp();
 
-    bool storeGeneList(vector<string>& geneList);
+    void storeCellBorder(char* borderPath, unsigned int size);
 
-    bool storeVersion();
+    void storeGeneList(vector<string>& geneList);
+
+    void storeGeneList();
+
+    void storeVersion();
 
     static bool copyFile(const string& inPath, const string& outPath);
 
-    void cell_bin(unsigned int ** cell_exp_index, unsigned int size);
+    void add_cell_bin(unsigned int * bin_index, unsigned int size);
 
     void setGeneExpMap(const string &inPath);
 
@@ -51,7 +68,9 @@ private:
     hid_t m_group_id;
     map<unsigned long long , vector<CellExpData>> gene_exp_map;
     vector<CellExpData> cell_exp_list;
+    vector<unsigned short> cell_dnb_count_list;
     vector<unsigned short> cell_gene_count_list;
-    vector<unsigned int> cell_exp_count_list;  //offset
+    vector<unsigned short> cell_exp_count_list;  //offset
     vector<unsigned int> cell_gene_exp_list;  //offset
+    GenePos* gene_pos;
 };

@@ -23,6 +23,7 @@ from setup_configure import BuildConfig
 def localpath(*args):
     return op.abspath(op.join(op.dirname(__file__), *args))
 
+MODULES = ['']
 
 COMPILER_SETTINGS = {
     'libraries': ['hdf5'],
@@ -85,11 +86,12 @@ class gefpy_build_ext(build_ext):
         if os.name != 'nt':
             settings['runtime_library_dirs'] = settings['library_dirs']
 
-        def make_gef_cy_extension():
-            sources = [localpath('gefpy', 'gene_exp_cy.pyx'), localpath('gefpy', 'H5Reader.cpp')]
-            return Extension('gefpy.gene_exp_cy', sources, **settings)
+        extensions = [
+            Extension('gefpy.gene_exp_cy', [localpath('gefpy', 'gene_exp_cy.pyx'), localpath('gefpy', 'GeneExp.cpp')], **settings),
+            Extension('gefpy.cell_exp_cy', [localpath('gefpy', 'cell_exp_cy.pyx'), localpath('gefpy', 'CellExpWriter.cpp'), localpath('gefpy', 'GeneExp.cpp')], **settings)
+        ]
 
-        return [make_gef_cy_extension()]
+        return extensions
 
     def run(self):
         """ Distutils calls this method to run the command """

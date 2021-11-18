@@ -9,9 +9,9 @@ cimport numpy as np
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-cdef extern from "H5Reader.h":
-    cdef cppclass H5Reader:
-        H5Reader(const string&, int bin_size) except +
+cdef extern from "GeneExp.h":
+    cdef cppclass GeneExp:
+        GeneExp(const string& filename, int bin_size) except +
         unsigned long long exp_len
         unsigned int minX, minY, maxX, maxY, gene_num, cell_num
 
@@ -23,12 +23,12 @@ cdef extern from "H5Reader.h":
 
 
 cdef class GEF:
-    cdef H5Reader* c_h5r  # Hold a C++ instance which we're wrapping
+    cdef GeneExp* c_h5r  # Hold a C++ instance which we're wrapping
     cdef unsigned long long exp_len
     cdef unsigned int minX, minY, maxX, maxY, gene_num
 
     # def __cinit__(self, filepath):
-    #     self.c_h5r = new H5Reader(filepath)
+    #     self.c_h5r = new GeneExp(filepath)
     #     self.exp_len = self.c_h5r.getExpLen()
     #     self.gene_num = self.c_h5r.getGeneNum()
     #     self.minX = self.c_h5r.minX
@@ -37,7 +37,7 @@ cdef class GEF:
     #     self.maxY = self.c_h5r.maxY
 
     def __init__(self, filepath, bin_size):
-        self.c_h5r = new H5Reader(filepath, bin_size)
+        self.c_h5r = new GeneExp(filepath, bin_size)
         self.exp_len = self.c_h5r.getExpLen()
         self.gene_num = self.c_h5r.getGeneNum()
         self.minX = self.c_h5r.minX
