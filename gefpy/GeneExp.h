@@ -5,15 +5,16 @@
 #include <vector>
 #include <iostream>
 #include "hdf5.h"
+#include "util.h"
 
 using namespace std;
 
-class H5Reader
+class GeneExp
 {
 public:
-    H5Reader(const string &filename, int bin_size);
+    GeneExp(const string &filename, int bin_size);
 
-    ~H5Reader();
+    ~GeneExp();
     //expressions number
     int bin_size = 0;
     unsigned int minX{}, minY{}, maxX{}, maxY{}, gene_num{}, cell_num{};
@@ -22,9 +23,12 @@ public:
     unsigned long long getExpLen() const;
     unsigned int getGeneNum() const;
 
+    Gene * getExpData();
     vector<unsigned long long> getExpData(unsigned int * cell_index, unsigned int * count);
 
     void getGeneData(unsigned int * gene_index, vector<string> & uniq_genes);
+
+    vector<string> getGeneList();
 
 private:
     hid_t m_file_id;

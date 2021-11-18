@@ -1,5 +1,4 @@
-#include "H5Reader.h"
-#include "util.h"
+#include "GeneExp.h"
 #include "khash.h"
 
 #include <iostream>
@@ -9,7 +8,7 @@ using namespace std;
 
 KHASH_MAP_INIT_INT64(m64, unsigned int)
 
-H5Reader::H5Reader(const string& filename, int bin_size)
+GeneExp::GeneExp(const string& filename, int bin_size)
 {
     this->m_file_id = H5Fopen(filename.c_str(), H5F_ACC_RDONLY, H5P_DEFAULT);
     this->bin_size = bin_size;
@@ -17,7 +16,7 @@ H5Reader::H5Reader(const string& filename, int bin_size)
     openGeneSpace();
 }
 
-H5Reader::~H5Reader()
+GeneExp::~GeneExp()
 {
     H5Fclose(m_file_id);
     H5Dclose(exp_dataset_id);
@@ -26,7 +25,24 @@ H5Reader::~H5Reader()
     H5Sclose(gene_dataspace_id);
 }
 
-vector<unsigned long long> H5Reader::getExpData(unsigned int * cell_index, unsigned int * count)
+
+Gene * GeneExp::getExpData() {
+    hid_t memtype;
+    hid_t attr;
+    unsigned long long cell_id;
+
+    memtype = H5Tcreate(H5T_COMPOUND, sizeof(Gene));
+    m_status = H5Tinsert(memtype, "x", HOFFSET(Gene, x), H5T_NATIVE_UINT);
+    m_status = H5Tinsert(memtype, "y", HOFFSET(Gene, y), H5T_NATIVE_UINT);
+    m_status = H5Tinsert(memtype, "count", HOFFSET(Gene, cnt), H5T_NATIVE_UINT);
+
+    Gene *expData;
+    expData = (Gene *) malloc(exp_len * sizeof(Gene));
+    m_status = H5Dread(exp_dataset_id, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, expData);
+    return expData;
+}
+
+vector<unsigned long long> GeneExp::getExpData(unsigned int * cell_index, unsigned int * count)
 {
 //    time_t now = time(nullptr);
 //    char* dt = ctime(&now);
@@ -114,7 +130,7 @@ vector<unsigned long long> H5Reader::getExpData(unsigned int * cell_index, unsig
     return uniq_cells;
 }
 
-void H5Reader::getGeneData(unsigned int * gene_index, vector<string> & uniq_genes)
+void GeneExp::getGeneData(unsigned int * gene_index, vector<string> & uniq_genes)
 {
     hid_t memtype;
     hid_t strtype;
@@ -154,15 +170,15 @@ void H5Reader::getGeneData(unsigned int * gene_index, vector<string> & uniq_gene
     H5Tclose(memtype);
 }
 
-unsigned long long int H5Reader::getExpLen() const {
+unsigned long long int GeneExp::getExpLen() const {
     return exp_len;
 }
 
-unsigned int H5Reader::getGeneNum() const {
+unsigned int GeneExp::getGeneNum() const {
     return gene_num;
 }
 
-void H5Reader::openExpressionSpace() {
+void GeneExp::openExpressionSpace() {
     hsize_t dims[1];
     // Read raw data
     char expName[128]={0};
@@ -178,7 +194,7 @@ void H5Reader::openExpressionSpace() {
     exp_len = dims[0];
 }
 
-void H5Reader::openGeneSpace() {
+void GeneExp::openGeneSpace() {
     hsize_t dims[1];
 
     // Read index
@@ -193,4 +209,8 @@ void H5Reader::openGeneSpace() {
     gene_dataspace_id = H5Dget_space(gene_dataset_id);
     H5Sget_simple_extent_dims(gene_dataspace_id, dims, NULL);
     gene_num = dims[0];
+}
+
+vector<string> GeneExp::getGeneList() {
+//    return ;
 }
