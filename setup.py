@@ -15,7 +15,7 @@ if sys.version_info < (3, 7):
 
 setup(
     name='gefpy',
-    version='0.1.0',
+    version='0.1.1',
     setup_requires=['pkgconfig', 'Cython', 'numpy', 'setuptools_scm'],
     description='Spatial transcriptomic analysis in python.',
     long_description=Path('README.md').read_text('utf-8'),
