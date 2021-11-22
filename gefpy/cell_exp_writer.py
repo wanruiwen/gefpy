@@ -35,29 +35,33 @@ class CellExpWriter(object):
         self.cell_num = len(self.i_mask.polygens)
 
         logger.info("Cell counter in mask file: {}".format(self.cell_num))
-
-        self.borders = np.zeros((self.cell_num, 16, 2), dtype=np.int8)
-        self.x = np.zeros((self.cell_num,), dtype=np.uint32)
-        self.y = np.zeros((self.cell_num,), dtype=np.uint32)
-        self.area = np.zeros((self.cell_num, ), dtype=np.uint16)
-
-        for id, p in enumerate(self.i_mask.polygens):
+        index_lst = list()
+        for ind, p in enumerate(self.i_mask.polygens):
             c_bin = self.cell_bin(p.border)
             if c_bin.shape[0] == 0:
                 self.cell_num -= 1
                 continue
             self.cell_exp_writer.add_cell_bin(c_bin, len(c_bin))
-
-            b_len = 16 if len(p.border) >= 16 else len(p.border)
-            for i in range(b_len):
-                self.borders[id, i, 0] = p.border[i, 0] - p.center[0]
-                self.borders[id, i, 1] = p.border[i, 1] - p.center[1]
-
-            self.x[id] = p.center[0]
-            self.y[id] = p.center[1]
-            self.area[id] = p.area
+            index_lst.append(ind)
 
         logger.info("Non zero dnb/exp cell counter: {}".format(self.cell_num))
+        self.borders = np.zeros((self.cell_num, 16, 2), dtype=np.int8)
+        self.x = np.zeros((self.cell_num,), dtype=np.uint32)
+        self.y = np.zeros((self.cell_num,), dtype=np.uint32)
+        self.area = np.zeros((self.cell_num, ), dtype=np.uint16)
+
+        offset = 0
+        for index in index_lst:
+            p = self.i_mask.polygens[index]
+            b_len = 16 if len(p.border) >= 16 else len(p.border)
+            for i in range(b_len):
+                self.borders[offset, i, 0] = p.border[i, 0] - p.center[0]
+                self.borders[offset, i, 1] = p.border[i, 1] - p.center[1]
+
+            self.x[offset] = p.center[0]
+            self.y[offset] = p.center[1]
+            self.area[offset] = p.area
+            offset += 1
 
 
     def cell_bin(self, border):

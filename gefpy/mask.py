@@ -31,7 +31,6 @@ class Polygen(object):
             self.center = (self.border[0][0], self.border[0][1])
         elif self.border.shape[0] == 2:
             self.center = (int((self.border[0][0] + self.border[1][0])/2.0), int((self.border[0][1] + self.border[1][1])/2.0))
-            print(self.border)
 
         self.area = cv.contourArea(points)
 

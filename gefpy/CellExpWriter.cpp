@@ -224,13 +224,13 @@ void CellExpWriter::add_cell_bin(unsigned int * bin_index, unsigned int size){
     }
 
     cell_exp_count_list.emplace_back(exp_count);
-    cell_gene_count_list.emplace_back(gene_count);
 
     if(cell_gene_exp_list.empty()){
         cell_gene_exp_list.emplace_back(0);
     }else {
-        cell_gene_exp_list.emplace_back(cell_gene_exp_list.back()+gene_count);
+        cell_gene_exp_list.emplace_back(cell_gene_exp_list.back()+cell_gene_count_list.back());
     }
+    cell_gene_count_list.emplace_back(gene_count);
 }
 
 void CellExpWriter::setGeneExpMap(const string &inPath){
@@ -246,10 +246,10 @@ void CellExpWriter::setGeneExpMap(const string &inPath){
     unsigned long long xy_bin;
     for (int i = 0; i < gene_exp.getExpLen(); ++i) {
         CellExpData cellExpData = {(unsigned short)gene_index[i], (unsigned short)expData[i].cnt};
-        xy_bin = expData[i].x - gene_exp.minX;
-        xy_bin = xy_bin << 32 | (expData[i].y - gene_exp.minY);
-//        xy_bin = expData[i].x;
-//        xy_bin = xy_bin << 32 | expData[i].y;
+//        xy_bin = expData[i].x - gene_exp.minX;
+//        xy_bin = xy_bin << 32 | (expData[i].y - gene_exp.minY);
+        xy_bin = expData[i].x;
+        xy_bin = xy_bin << 32 | expData[i].y;
 
         auto iter = gene_exp_map.find(xy_bin);
         if(iter != gene_exp_map.end()){
