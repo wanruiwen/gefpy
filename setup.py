@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 # coding: utf-8
-"""
-@author: Ping Qiu  qiuping1@genomics.cn
-@last modified by: Ping Qiu
-@file:setup.py
-@time:2021/03/02
-"""
 from setuptools import Extension, setup, find_packages
 import sys
 from pathlib import Path
@@ -21,8 +15,8 @@ if sys.version_info < (3, 7):
 
 setup(
     name='gefpy',
-    version='0.2.1',
-    setup_requires=['pkgconfig', 'Cython', 'setuptools_scm'],
+    version='0.1.0',
+    setup_requires=['pkgconfig', 'Cython', 'numpy', 'setuptools_scm'],
     description='Spatial transcriptomic analysis in python.',
     long_description=Path('README.md').read_text('utf-8'),
     long_description_content_type="text/markdown",
@@ -35,7 +29,8 @@ setup(
         "h5py >= 3.2.1",
         "setuptools >= 41.0.0",
         "opencv-python >= 4.5.4.58",
-        "tifffile"
+        "tifffile",
+        "imagecodecs"
     ],
     extras_require=dict(
         doc=['sphinx>=3.2'],

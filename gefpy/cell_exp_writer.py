@@ -1,7 +1,6 @@
 import h5py
-from mask import Mask
+from gefpy.mask import Mask
 import numpy as np
-import pandas as pd
 import cv2 as cv
 from gefpy.cell_exp_cy import CellExpW
 
@@ -10,7 +9,7 @@ logging.basicConfig(level = logging.INFO,format = '%(asctime)s - %(name)s - %(le
 logger = logging.getLogger(__name__)
 
 
-class CellExpWriterPy(object):
+class CellExpWriter(object):
     cell_exp_writer: CellExpW
 
     def __init__(self, gef_file, mask_file, out_file):
@@ -35,12 +34,20 @@ class CellExpWriterPy(object):
 
         self.cell_num = len(self.i_mask.polygens)
 
+        logger.info("Cell counter in mask file: {}".format(self.cell_num))
+
         self.borders = np.zeros((self.cell_num, 16, 2), dtype=np.int8)
         self.x = np.zeros((self.cell_num,), dtype=np.uint32)
         self.y = np.zeros((self.cell_num,), dtype=np.uint32)
         self.area = np.zeros((self.cell_num, ), dtype=np.uint16)
 
         for id, p in enumerate(self.i_mask.polygens):
+            c_bin = self.cell_bin(p.border)
+            if c_bin.shape[0] == 0:
+                self.cell_num -= 1
+                continue
+            self.cell_exp_writer.add_cell_bin(c_bin, len(c_bin))
+
             b_len = 16 if len(p.border) >= 16 else len(p.border)
             for i in range(b_len):
                 self.borders[id, i, 0] = p.border[i, 0] - p.center[0]
@@ -50,8 +57,8 @@ class CellExpWriterPy(object):
             self.y[id] = p.center[1]
             self.area[id] = p.area
 
-            c_bin = self.cell_bin(p.border)
-            self.cell_exp_writer.add_cell_bin(c_bin, len(c_bin))
+        logger.info("Non zero dnb/exp cell counter: {}".format(self.cell_num))
+
 
     def cell_bin(self, border):
         nap = np.array(border)
@@ -65,7 +72,7 @@ class CellExpWriterPy(object):
 
         arr = cv.fillPoly(arr, [nap], 1)
 
-        gem_mat = arr * self.exp_matrix[y0: y1, x0: x1]
+        gem_mat = arr * self.exp_matrix[y0: y1+1, x0: x1+1]
         y, x = np.where(gem_mat > 0)
         bin_index = np.zeros((len(y), 2), dtype=np.uint32)
         for i in range(len(y)):
@@ -84,39 +91,3 @@ class CellExpWriterPy(object):
         self.cell_exp_writer.storeCellExp()
         logger.info('Gef write completed : \'{}\''.format(self.out_file))
 
-
-class CellExpReaderPy(object):
-    def __init__(self, filepath):
-        self.filepath = filepath
-        self.exp_len = 0
-        self.gene_num = 0
-        self.cell_num = 0
-        self.genes = None
-        self.cells = None
-        self.rows = None
-        self.cols = None
-        self.count = None
-        self.positions = None
-        self._init()
-
-    def _init(self):
-        with h5py.File(self.filepath, mode='r') as h5f:
-            self.genes = pd.DataFrame(h5f['cellBin']['geneList']).values
-            self.cols = pd.DataFrame(h5f['cellBin']['cellExp']['geneID']).values
-            self.count = pd.DataFrame(h5f['cellBin']['cellExp']['count']).values
-            self.exp_len = self.cols.shape[0]
-            self.gene_num = self.genes.shape[0]
-            self.positions  = pd.DataFrame(h5f['cellBin']['cell']['x', 'y']).values
-            self.cell_num = self.positions.shape[0]
-
-            self.cells = np.array(self.positions[:,0], dtype='uint64')
-            self.cells = np.bitwise_or(
-                np.left_shift(self.cells, 32), self.positions[:,1])
-
-            gene_counts = pd.DataFrame(h5f['cellBin']['cell']['geneCount']).values
-            self.rows = np.zeros((self.exp_len , ), dtype='uint32')
-            exp_index = 0
-            for i, gene_c in enumerate(gene_counts):
-                for index in range(gene_c):
-                    self.rows[exp_index] = i
-                    exp_index += 1
