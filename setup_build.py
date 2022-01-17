@@ -23,26 +23,20 @@ from setup_configure import BuildConfig
 def localpath(*args):
     return op.abspath(op.join(op.dirname(__file__), *args))
 
+
 MODULES = ['']
 
 COMPILER_SETTINGS = {
-    'libraries': ['hdf5'],
+    'libraries': ['gef'],
     'include_dirs': [],
     'library_dirs': [],
-    'define_macros': [('H5_USE_18_API', None),
-                      ('NPY_NO_DEPRECATED_API', 0),
-                      ],
+    'define_macros': [('NPY_NO_DEPRECATED_API', 0)],
     'language': 'c++',
     'extra_compile_args': ["-std=c++11", "-Wno-sign-compare"]
 }
 
-
 if sys.platform.startswith('win'):
     COMPILER_SETTINGS['include_dirs'].append(localpath('windows'))
-    COMPILER_SETTINGS['define_macros'].extend([
-        ('_HDF5USEDLL_', None),
-        ('H5_BUILT_AS_DYNAMIC_LIB', None)
-    ])
 
 
 class gefpy_build_ext(build_ext):
@@ -66,9 +60,10 @@ class gefpy_build_ext(build_ext):
 
         settings = COMPILER_SETTINGS.copy()
 
-        settings['include_dirs'][:0] = config.hdf5_includedirs
-        settings['library_dirs'][:0] = config.hdf5_libdirs
-        settings['define_macros'].extend(config.hdf5_define_macros)
+        settings['include_dirs'][:0] = config.geftools_includedirs
+        settings['library_dirs'][:0] = config.geftools_libdirs
+        settings['include_dirs'].extend(config.opencv_includedirs)
+        settings['include_dirs'].extend(config.hdf5_includedirs)
 
         try:
             numpy_includes = numpy.get_include()
@@ -78,17 +73,20 @@ class gefpy_build_ext(build_ext):
             numpy_includes = os.path.join(os.path.dirname(numpy.core.__file__), 'include')
 
         settings['include_dirs'] += [numpy_includes]
-        if config.mpi:
-            import mpi4py
-            settings['include_dirs'] += [mpi4py.get_include()]
+
+        print(settings)
 
         # TODO: should this only be done on UNIX?
         if os.name != 'nt':
             settings['runtime_library_dirs'] = settings['library_dirs']
 
         extensions = [
-            Extension('gefpy.gene_exp_cy', [localpath('gefpy', 'gene_exp_cy.pyx'), localpath('gefpy', 'GeneExp.cpp')], **settings),
-            Extension('gefpy.cell_exp_cy', [localpath('gefpy', 'cell_exp_cy.pyx'), localpath('gefpy', 'CellExpWriter.cpp'), localpath('gefpy', 'GeneExp.cpp')], **settings)
+            Extension('gefpy.bgef_reader_cy', [localpath('gefpy', 'bgef_reader_cy.pyx')],
+                      **settings),
+            Extension('gefpy.cgef_reader_cy',
+                      [localpath('gefpy', 'cgef_reader_cy.pyx')], **settings),
+            Extension('gefpy.cgef_writer_cy',
+                      [localpath('gefpy', 'cgef_writer_cy.pyx')], **settings)
         ]
 
         return extensions
@@ -114,14 +112,11 @@ class gefpy_build_ext(build_ext):
         # Run Cython
         print("Executing cythonize()")
         self.extensions = cythonize(self._make_extensions(config),
-                                    force=config.changed() or self.force,
+                                    force=self.force,
                                     language_level=3)
-
+        print("build_ext")
         # Perform the build
         build_ext.run(self)
-
-        # Record the configuration we built
-        config.record_built()
 
 
 def write_if_changed(target_path, s: str):
