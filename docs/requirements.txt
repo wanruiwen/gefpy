@@ -1,0 +1,8 @@
+setuptools
+sphinx==3.1.1
+sphinx-rtd-theme==0.5.0
+sphinx_autodoc_typehints
+ipykernel
+nbsphinx>=0.7
+nbclean
+numpy>=1.17.0
