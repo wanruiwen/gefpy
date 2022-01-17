@@ -2,6 +2,7 @@
 # coding: utf-8
 from setuptools import Extension, setup, find_packages
 import sys
+import os
 from pathlib import Path
 
 # Newer packaging standards may recommend removing the current dir from the
@@ -11,7 +12,11 @@ if '' not in sys.path:
 import setup_build
 
 if sys.version_info < (3, 7):
-    sys.exit('stereopy requires Python >= 3.7')
+    sys.exit('gefpy requires Python >= 3.7')
+
+package_data = {'gefpy': [], "gefpy.tests.data_files": ["*.h5"]}
+if os.name == 'nt':
+    package_data['gefpy'].append('*.dll')
 
 setup(
     name='gefpy',
@@ -25,18 +30,14 @@ setup(
     author_email='huangzhibo@genomics.cn',
     python_requires='>=3.7',
     install_requires=[
-        "pandas >= 1.3.3",
-        "h5py >= 3.2.1",
-        "setuptools >= 41.0.0",
-        "opencv-python >= 4.5.4.58",
-        "tifffile",
-        "imagecodecs"
+        "h5py >= 3.2.1"
     ],
     extras_require=dict(
         doc=['sphinx>=3.2'],
         test=['pytest>=4.4', 'pytest-nunit'],
     ),
     packages=find_packages(),
+    package_data=package_data,
     include_package_data=True,
     ext_modules=[Extension('gefpy.x', ['x.cpp'])],
     classifiers=[
@@ -49,5 +50,5 @@ setup(
         'Topic :: Scientific/Engineering :: Bio-Informatics',
         'Topic :: Scientific/Engineering :: Visualization',
     ],
-    cmdclass = {'build_ext': setup_build.gefpy_build_ext}
+    cmdclass={'build_ext': setup_build.gefpy_build_ext}
 )
