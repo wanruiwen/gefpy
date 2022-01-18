@@ -66,6 +66,11 @@ cdef class CgefR:
         self.c_cgef.getCellPosList(&cell_ids[0])
         return np.asarray(cell_ids)
 
+    def get_cell(self):
+        cdef CellData[::1] cells = np.empty(self.c_bgef.getGeneNum()+1, dtype=np.uint32)
+        cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
+                                           itemsize=32*sizeof(char), format='32s', allocate_buffer=True)
+
     def get_sparse_matrix_indices(self, str order = 'gene'):
         """
         Gets indices for building csr_matrix.
@@ -104,6 +109,31 @@ cdef class CgefR:
         cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
         self.c_cgef.getSparseMatrixIndices2(&cell_ind[0], &gene_ind[0], &count[0])
         return np.asarray(cell_ind), np.asarray(gene_ind), np.asarray(count)
+
+    def use_region(self, min_x, max_x, min_y, max_y):
+        self.c_cgef.useRegion(min_x, max_x, min_y, max_y)
+
+    def get_cellid_and_count(self):
+        """
+        Gets cellId and count from the geneExp dataset.
+
+        :return:  (cell_id, count)
+        """
+        cdef unsigned int[::1] cell_id = np.empty(self.exp_len, dtype=np.uint32)
+        cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
+        self.c_cgef.getCellIdAndCount(&cell_id[0], &count[0])
+        return np.asarray(cell_id), np.asarray(count)
+
+    def get_geneid_and_count(self):
+        """
+        Gets geneId and count from the cellExp dataset.
+        
+        :return:  (gene_id, count)
+        """
+        cdef unsigned int[::1] gene_id = np.empty(self.exp_len, dtype=np.uint32)
+        cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
+        self.c_cgef.getGeneIdAndCount(&gene_id[0], &count[0])
+        return np.asarray(gene_id), np.asarray(count)
 
 
 

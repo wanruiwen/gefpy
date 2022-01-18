@@ -83,6 +83,8 @@ class gefpy_build_ext(build_ext):
         extensions = [
             Extension('gefpy.bgef_reader_cy', [localpath('gefpy', 'bgef_reader_cy.pyx')],
                       **settings),
+            Extension('gefpy.gene_exp_cy', [localpath('gefpy', 'gene_exp_cy.pyx')],
+                      **settings),
             Extension('gefpy.cgef_reader_cy',
                       [localpath('gefpy', 'cgef_reader_cy.pyx')], **settings),
             Extension('gefpy.cgef_writer_cy',

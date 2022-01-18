@@ -20,9 +20,13 @@ cdef extern from "cgef_reader.h" nogil:
         int getSparseMatrixIndices(unsigned int * indices,
                                    unsigned int * indptr,
                                    unsigned int * count,
-                                   const char * order);
+                                   const char * order)
 
-        int getSparseMatrixIndices2(unsigned int * cell_ind, unsigned int * gene_ind, unsigned int * count);
+        int getSparseMatrixIndices2(unsigned int * cell_ind, unsigned int * gene_ind, unsigned int * count)
 
-        void useRegion(unsigned int min_x, unsigned int max_x, unsigned int min_y, unsigned int max_y);
+        void useRegion(unsigned int min_x, unsigned int max_x, unsigned int min_y, unsigned int max_y)
+
+        void getCellIdAndCount(unsigned int * cell_id, unsigned int * count) const
+
+        void getGeneIdAndCount(unsigned int * gene_id, unsigned int * count) const
 
