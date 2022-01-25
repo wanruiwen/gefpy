@@ -18,8 +18,18 @@ This module supports reading common bin GEF files.
 .. autosummary::
    :toctree: .
 
-   bgef_reader_cy.BgefR
+   bgef_writer_cy
+  
 
+Bin GEF Writer
+-------------------
+
+This module supports writing common bin GEF files.
+
+.. autosummary::
+   :toctree: .
+
+   bgef_reader_cy.BgefR
 
 Cell Bin GEF Reader
 -------------------
@@ -31,7 +41,7 @@ This module supports reading cell bin GEF files.
 
    cgef_reader_cy.CgefR
 
-Cell Bin GEF writer
+Cell Bin GEF Writer
 -------------------
 
 This module supports writing cell bin GEF files.

@@ -28,7 +28,7 @@ copyright = '2022, Huang Zhibo'
 author = 'Huang Zhibo'
 
 # The full version, including alpha/beta/rc tags
-release = '0.2'
+release = '0.3'
 
 
 # -- General configuration ---------------------------------------------------
@@ -64,7 +64,6 @@ autodoc_member_order = 'bysource'
 autodoc_default_flags = ['members']
 todo_include_todos = False
 api_dir = HERE / 'api'  # function_images
-print(api_dir)
 # The master toctree document.
 language = None
 
