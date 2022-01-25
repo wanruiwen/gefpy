@@ -5,6 +5,7 @@
 """
 
 from .cgef_reader cimport *
+from cython cimport view
 
 
 cdef class CgefR:
@@ -58,18 +59,19 @@ cdef class CgefR:
         self.c_cgef.getGeneNameList(gene_names)
         return np.asarray(gene_names)
 
-    def get_cell_ids(self):
+    def get_cell_names(self):
         """
         Get an array of cell ids.
         """
-        cdef unsigned long long int[::1] cell_ids = np.empty(self.get_cell_num(), dtype=np.uint64)
-        self.c_cgef.getCellPosList(&cell_ids[0])
-        return np.asarray(cell_ids)
+        cdef unsigned long long int[::1] cell_names = np.empty(self.get_cell_num(), dtype=np.uint64)
+        self.c_cgef.getCellNameList(&cell_names[0])
+        return np.asarray(cell_names)
 
-    def get_cell(self):
-        cdef CellData[::1] cells = np.empty(self.c_bgef.getGeneNum()+1, dtype=np.uint32)
-        cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
-                                           itemsize=32*sizeof(char), format='32s', allocate_buffer=True)
+    # def get_cell(self):
+        # cdef view.array cells = view.array((self.c_cgef.getCellNum(),),
+        #                                    itemsize=sizeof(CellData), format=CellData, allocate_buffer=True)
+        # cells.data = <char*>self.c_cgef.getCell()
+        # return np.asarray(self.c_cgef.getCell())
 
     def get_sparse_matrix_indices(self, str order = 'gene'):
         """
@@ -110,8 +112,11 @@ cdef class CgefR:
         self.c_cgef.getSparseMatrixIndices2(&cell_ind[0], &gene_ind[0], &count[0])
         return np.asarray(cell_ind), np.asarray(gene_ind), np.asarray(count)
 
-    def use_region(self, min_x, max_x, min_y, max_y):
-        self.c_cgef.useRegion(min_x, max_x, min_y, max_y)
+    def restrict_region(self, min_x, max_x, min_y, max_y):
+        self.c_cgef.restrictRegion(min_x, max_x, min_y, max_y)
+
+    def restrict_gene(self, vector[string] & gene_list):
+        self.c_cgef.restrictGene(gene_list, False)
 
     def get_cellid_and_count(self):
         """
@@ -120,7 +125,7 @@ cdef class CgefR:
         :return:  (cell_id, count)
         """
         cdef unsigned int[::1] cell_id = np.empty(self.exp_len, dtype=np.uint32)
-        cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
+        cdef unsigned short[::1] count = np.empty(self.exp_len, dtype=np.uint16)
         self.c_cgef.getCellIdAndCount(&cell_id[0], &count[0])
         return np.asarray(cell_id), np.asarray(count)
 
@@ -130,8 +135,8 @@ cdef class CgefR:
         
         :return:  (gene_id, count)
         """
-        cdef unsigned int[::1] gene_id = np.empty(self.exp_len, dtype=np.uint32)
-        cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
+        cdef unsigned short[::1] gene_id = np.empty(self.exp_len, dtype=np.uint16)
+        cdef unsigned short[::1] count = np.empty(self.exp_len, dtype=np.uint16)
         self.c_cgef.getGeneIdAndCount(&gene_id[0], &count[0])
         return np.asarray(gene_id), np.asarray(count)
 

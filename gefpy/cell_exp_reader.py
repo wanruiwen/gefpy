@@ -19,7 +19,7 @@ class CellExpReader(object):
 
     def _init(self):
         with h5py.File(self.filepath, mode='r') as h5f:
-            self.genes = np.array(h5f['cellBin']['geneList'])
+            self.genes = np.array(h5f['cellBin']['gene']['geneName'])
             self.cols = np.array(h5f['cellBin']['cellExp']['geneID'])
             self.count = np.array(h5f['cellBin']['cellExp']['count'])
             self.exp_len = self.cols.shape[0]

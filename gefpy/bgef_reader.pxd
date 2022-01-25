@@ -17,7 +17,8 @@ cdef extern from "bgef_reader.h":
         unsigned int getExpressionNum() const
 
         void getGeneNameList(vector[string] & gene_list)
-        void getCellPosList(unsigned long long int * cell_pos_list)
+        void getCellNameList(unsigned long long int * cell_name_list)
+        unsigned long long int * getCellPos()
 
         vector[unsigned long long] getSparseMatrixIndicesOfExp(unsigned int * cell_index, unsigned int * count)
         vector[string] getSparseMatrixIndicesOfGene(unsigned int * gene_index)

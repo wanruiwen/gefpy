@@ -65,13 +65,25 @@ cdef class BgefR:
         self.c_bgef.getGeneNameList(gene_names)
         return np.asarray(gene_names)
 
-    def get_cell_ids(self):
+    def get_cell_names(self):
         """
         Get an array of cell ids.
         """
-        cdef unsigned long long int[::1] cell_ids = np.empty(self.get_cell_num(), dtype=np.uint64)
-        self.c_bgef.getCellPosList(&cell_ids[0])
-        return np.asarray(cell_ids)
+        cdef unsigned long long int[::1] cell_names = np.empty(self.get_cell_num(), dtype=np.uint64)
+        # cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
+        #                                    itemsize=32*sizeof(char), format='32s', allocate_buffer=True)
+        self.c_bgef.getCellNameList(&cell_names[0])
+        return np.asarray(cell_names)
+
+    def get_cell_names2(self, np.ndarray[np.ulonglong_t, ndim=1] cell_names):
+        """
+        Get an array of cell ids.
+        """
+        # cdef unsigned long long int[::1] cell_names = np.empty(self.get_cell_num(), dtype=np.uint64)
+        # cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
+        #                                    itemsize=32*sizeof(char), format='32s', allocate_buffer=True)
+        self.c_bgef.getCellNameList(<unsigned long long int *>cell_names.data)
+        # return np.asarray(cell_names)
 
     # def get_gene_data(self):
     #     cdef unsigned int[::1] gene_index = np.empty(self.exp_len, dtype=np.uint32)

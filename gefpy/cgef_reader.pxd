@@ -7,6 +7,8 @@ from libcpp.vector cimport vector
 from libcpp.string cimport string
 from libcpp cimport bool
 
+from .gef cimport *
+
 cdef extern from "cgef_reader.h" nogil:
     cdef cppclass CgefReader:
         CgefReader(const string &filename, bool verbose)
@@ -14,8 +16,16 @@ cdef extern from "cgef_reader.h" nogil:
         unsigned int getCellNum() const;
         unsigned int getExpressionNum() const;
 
+        void getGeneName(char * gene_list)
+
+        int getGeneId(string& gene_name)
+        GeneData *getGene()
+        GeneData getGene(unsigned short gene_id) const
+        CellData *getCell()
+        CellData getCell(unsigned int cell_id) const
+
         void getGeneNameList(vector[string] & gene_list)
-        void getCellPosList(unsigned long long int * cell_pos_list)
+        void getCellNameList(unsigned long long int * cell_name_list)
 
         int getSparseMatrixIndices(unsigned int * indices,
                                    unsigned int * indptr,
@@ -24,9 +34,11 @@ cdef extern from "cgef_reader.h" nogil:
 
         int getSparseMatrixIndices2(unsigned int * cell_ind, unsigned int * gene_ind, unsigned int * count)
 
-        void useRegion(unsigned int min_x, unsigned int max_x, unsigned int min_y, unsigned int max_y)
+        void restrictRegion(unsigned int min_x, unsigned int max_x, unsigned int min_y, unsigned int max_y)
 
-        void getCellIdAndCount(unsigned int * cell_id, unsigned int * count) const
+        void restrictGene(vector[string] & gene_list, bool exclude)
 
-        void getGeneIdAndCount(unsigned int * gene_id, unsigned int * count) const
+        void getCellIdAndCount(unsigned int *cell_id, unsigned short *count) const
+
+        void getGeneIdAndCount(unsigned short *gene_id, unsigned short *count) const
 

@@ -54,7 +54,7 @@ class BuildConfig:
             cv_inc = [op.join(opencv, 'include/opencv4')]
 
         if hdf5:
-            hdf5_inc = [op.join(geftools, 'include')]
+            hdf5_inc = [op.join(hdf5, 'include')]
 
         if geftools:
             gef_inc = [op.join(geftools, 'include')]
