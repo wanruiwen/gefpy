@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Installation &#8212; gefpy 0.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API" href="../api/index.html" />
+    <link rel="prev" title="Welcome to gefpy’s documentation!" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../api/index.html" title="API"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to gefpy’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">gefpy 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Installation</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<section id="pre-built-installation-recommended">
+<h2>Pre-built installation (recommended)<a class="headerlink" href="#pre-built-installation-recommended" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install gefpy
+</pre></div>
+</div>
+</section>
+<section id="source-installation">
+<h2>Source installation<a class="headerlink" href="#source-installation" title="Permalink to this headline">¶</a></h2>
+<p>To install gefpy from source, you need:</p>
+<ul class="simple">
+<li><p>HDF5 1.8.4 or newer with development headers</p></li>
+<li><p>OpenCV 4.5 or newer with development headers</p></li>
+<li><p>GEFTOOLS with development headers</p></li>
+<li><p>A C compiler</p></li>
+</ul>
+<p>On Unix platforms, you also need pkg-config unless you explicitly specify a path for HDF5 as described below.</p>
+<p>You can specify build options for gefpy as environment variables when you build it from source:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/BGIResearch/gefpy.git
+<span class="nb">cd</span> gefpy
+<span class="nb">export</span> <span class="nv">HDF5_DIR</span><span class="o">=</span>/path/to/hdf5
+<span class="nb">export</span> <span class="nv">OpenCV_DIR</span><span class="o">=</span>/path/to/opencv
+<span class="nb">export</span> <span class="nv">GEFTOOLS_DIR</span><span class="o">=</span>/path/to/geftools
+python setup.py install
+</pre></div>
+</div>
+<p>The supported build options are:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>To specify where to find HDF5, OpenCV, GEFTOOLS:</dt><dd><ul>
+<li><p>HDF5_DIR: a shortcut for common installations of HDF5, a directory with lib and include subdirectories containing compiled libraries and C headers.</p></li>
+<li><p>OpenCV_DIR: a shortcut for common installations of OpenCV, a directory with lib and include subdirectories containing compiled libraries and C headers.</p></li>
+<li><p>GEFTOOLS_DIR: a shortcut for common installations of geftools, a directory with lib and include subdirectories containing compiled libraries and C headers.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<section id="source-installation-on-osx-macos">
+<h3>Source installation on OSX/MacOS<a class="headerlink" href="#source-installation-on-osx-macos" title="Permalink to this headline">¶</a></h3>
+<p>HDF5 and Python are most likely in your package manager (e.g. Homebrew, Macports, or Fink). Be sure to install the development headers, as sometimes they are not included in the main package.</p>
+<p>XCode comes with a C compiler (clang), and your package manager will likely have other C compilers for you to install.</p>
+</section>
+<section id="source-installation-on-linux-other-unix">
+<h3>Source installation on Linux/Other Unix<a class="headerlink" href="#source-installation-on-linux-other-unix" title="Permalink to this headline">¶</a></h3>
+<p>HDF5 and Python are most likely in your package manager. A C compiler almost definitely is, usually there is some kind of metapackage to install the default build tools, e.g. build-essential, which should be sufficient for our needs. Make sure that that you have the development headers, as they are usually not installed by default. They can usually be found in python-dev or similar and libhdf5-dev or similar.</p>
+</section>
+<section id="source-installation-on-windows">
+<h3>Source installation on Windows<a class="headerlink" href="#source-installation-on-windows" title="Permalink to this headline">¶</a></h3>
+<p>Installing from source on Windows is a much more difficult prospect than installing from source on other OSs, as not only are you likely to need to compile HDF5 from source, everything must be built with the correct version of Visual Studio. Additional patches are also needed to HDF5 to get HDF5 and Python to work together.</p>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a><ul>
+<li><a class="reference internal" href="#pre-built-installation-recommended">Pre-built installation (recommended)</a></li>
+<li><a class="reference internal" href="#source-installation">Source installation</a><ul>
+<li><a class="reference internal" href="#source-installation-on-osx-macos">Source installation on OSX/MacOS</a></li>
+<li><a class="reference internal" href="#source-installation-on-linux-other-unix">Source installation on Linux/Other Unix</a></li>
+<li><a class="reference internal" href="#source-installation-on-windows">Source installation on Windows</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Welcome to gefpy’s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../api/index.html"
+                        title="next chapter">API</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/General/Installation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../api/index.html" title="API"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to gefpy’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">gefpy 0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Installation</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Huang Zhibo.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </div>
+  </body>
+</html>
