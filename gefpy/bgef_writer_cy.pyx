@@ -5,8 +5,6 @@
 """
     Provides access to the bgef_writer interface.
 """
-import numpy as np
-cimport numpy as np
 
 from .bgef_writer cimport *
 
