@@ -27,14 +27,14 @@ cdef extern from "bgef_reader.h":
         int getSparseMatrixIndices(unsigned int *indices, unsigned int *indptr, unsigned int *count)
         int getSparseMatrixIndices2(unsigned int *cell_ind, unsigned int *gene_ind, unsigned int *count)
 
-        const unsigned int *getWholeExpMatrixShape() const
+        const unsigned int *getWholeExpMatrixShape()
 
         void readWholeExpMatrix(unsigned int offset_x,
                                 unsigned int offset_y,
                                 unsigned int rows,
                                 unsigned int cols,
                                 string & key,
-                                unsigned char *matrix) const
+                                unsigned char *matrix)
 
         void readWholeExpMatrix(string & key,
-                                unsigned char *matrix) const
+                                unsigned char *matrix)

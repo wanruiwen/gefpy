@@ -20,17 +20,18 @@ if os.name == 'nt':
 
 setup(
     name='gefpy',
-    version='0.3.0',
-    setup_requires=['pkgconfig', 'Cython', 'numpy', 'setuptools_scm'],
-    description='Spatial transcriptomic analysis in python.',
+    version='0.3.2',
+    description='A thin, pythonic wrapper around geftool.',
     long_description=Path('README.md').read_text('utf-8'),
     long_description_content_type="text/markdown",
     url='https://github.com/BGIResearch/gefpy',
     author='BGIResearch',
     author_email='huangzhibo@genomics.cn',
     python_requires='>=3.7',
+    setup_requires=['pkgconfig', 'Cython', 'numpy>=1.20.0,<1.22.0', 'setuptools_scm'],
     install_requires=[
-        "h5py >= 3.2.1"
+        "h5py >= 3.2.1",
+        "numpy >= 1.20.0"
     ],
     extras_require=dict(
         doc=['sphinx>=3.2'],
