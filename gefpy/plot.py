@@ -28,7 +28,7 @@ from gefpy.utils import gef_is_cell_bin
 #     return cutoff
 
 def save_exp_heat_map(input_gef, output_png, scale=2, dpi=72):
-    h5f = h5py.File(input_gef)
+    h5f = h5py.File(input_gef, 'r')
     if 'cellBin' in h5f:
         d_x = h5f['cellBin']['cell']['x']
         d_y = h5f['cellBin']['cell']['y']
