@@ -11,20 +11,27 @@
 from .bgef_reader cimport *
 import numpy as np
 cimport numpy as np
+import array
 
 from cython cimport view
+
+# EXP_DTYPE = np.dtype([
+#     ('x', np.uint32),
+#     ('y', np.uint32),
+#     ('count', np.uint32),
+# ])
 
 cdef class BgefR:
     cdef BgefReader* bgef_instance # Hold a C++ instance which we're wrapping
     cdef unsigned int exp_len
     cdef unsigned int gene_num
 
-    def __cinit__(self, filepath, bin_size):
-        self.bgef_instance = new BgefReader(filepath, bin_size, False)
+    def __cinit__(self, filepath, bin_size, n_thread):
+        self.bgef_instance = new BgefReader(filepath, bin_size, n_thread, True)
         self.exp_len = self.bgef_instance.getExpressionNum()
         self.gene_num = self.bgef_instance.getGeneNum()
 
-    def __init__(self, filepath, bin_size):
+    def __init__(self, filepath, bin_size, n_thread):
         """
         A class for reading common bin GEF.
 
@@ -89,6 +96,29 @@ cdef class BgefR:
     #     cdef unsigned int[::1] gene_index = np.empty(self.exp_len, dtype=np.uint32)
     #     cdef vector[string] uniq_genes = self.bgef_instance.getSparseMatrixIndexesOfGene(&gene_index[0])
     #     return np.asarray(gene_index), np.asarray(uniq_genes)
+
+    # def get_expression(self, np.ndarray[np.uint32_t, ndim = 1] expression):
+    #     cdef Expression * exp = self.bgef_instance.getExpression()
+    #     for i in range(self.exp_len):
+    #         expression[3*i] = exp[i].x
+    #         expression[3*i+1] = exp[i].y
+    #         expression[3*i+2] = exp[i].count
+
+    def get_expression(self):
+        cdef view.array exp = view.array((self.exp_len,3),
+                                         itemsize=4*sizeof(char), format='I', allocate_buffer=False)
+        exp.data = <char*>self.bgef_instance.getExpression()
+        # arr = np.asarray(exp, dtype=EXP_DTYPE)
+        # arr.astype(EXP_DTYPE)
+        return np.asarray(exp)
+
+    def get_reduce_expression(self):
+        cdef view.array exp = view.array((self.get_cell_num(),3),
+                                         itemsize=4*sizeof(char), format='I', allocate_buffer=False)
+        exp.data = <char*>self.bgef_instance.getReduceExpression()
+        # arr = np.asarray(exp, dtype=EXP_DTYPE)
+        # arr.astype(EXP_DTYPE)
+        return np.asarray(exp)
 
     def get_sparse_matrix_indices(self):
         """

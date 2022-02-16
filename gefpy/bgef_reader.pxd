@@ -7,14 +7,19 @@
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 from libcpp cimport bool
+from .gef cimport *
 
 
-cdef extern from "bgef_reader.h":
+cdef extern from "bgef_reader.h" nogil:
     cdef cppclass BgefReader:
-        BgefReader(const string& filename, int bin_size, bool verbose) except +
+        BgefReader(const string& filename, int bin_size, int n_thread, bool verbose) except +
         unsigned int getGeneNum() const
         unsigned int getCellNum()
         unsigned int getExpressionNum() const
+
+        Expression * getExpression()
+
+        Expression * getReduceExpression()
 
         void getGeneNameList(vector[string] & gene_list)
         void getCellNameList(unsigned long long int * cell_name_list)

@@ -22,7 +22,7 @@ cdef class GEF:
     cdef unsigned int gene_num
 
     def __cinit__(self, filepath, bin_size):
-        self.c_bgef = new BgefReader(filepath, bin_size, True)
+        self.c_bgef = new BgefReader(filepath, bin_size, 1, True)
         self.exp_len = self.c_bgef.getExpressionNum()
         self.gene_num = self.c_bgef.getGeneNum()
 
