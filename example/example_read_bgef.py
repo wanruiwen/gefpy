@@ -16,6 +16,9 @@ def main():
 
     bgef = BgefR("../test_data/FP200000617TL_B6/FP200000617TL_B6.gefpy.bin1.3.gef", 50, 4)
 
+    # generate gem
+    bgef.to_gem("../test_data/FP200000617TL_B6/FP200000617TL_B6.gefpy.bin1.3.gem")
+
     # exp = np.empty(bgef.get_expression_num()*3, dtype=np.int32)
     exp = bgef.get_expression()
     # exp.astype(EXP_DTYPE)
