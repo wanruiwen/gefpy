@@ -223,3 +223,6 @@ cdef class BgefR:
         cdef view.array shape = view.array((2,), itemsize=sizeof(unsigned int), format="I", allocate_buffer=False)
         shape.data = <char *>self.bgef_instance.getWholeExpMatrixShape()
         return np.asarray(shape)
+
+    def to_gem(self, filename):
+        self.bgef_instance.toGem(filename)

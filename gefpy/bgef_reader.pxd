@@ -43,3 +43,5 @@ cdef extern from "bgef_reader.h" nogil:
 
         void readWholeExpMatrix(string & key,
                                 unsigned char *matrix)
+
+        unsigned int toGem(string & filename)
