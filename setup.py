@@ -37,7 +37,7 @@ setup(
         "pandas"
     ],
     extras_require=dict(
-        doc=['sphinx>=3.2'],
+        docs=['sphinx>=3.2'],
         test=['pytest>=4.4', 'pytest-nunit'],
     ),
     packages=find_packages(),
