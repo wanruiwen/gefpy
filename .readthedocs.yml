@@ -2,7 +2,7 @@ version: 2
 formats: []
 
 build:
-  image: huangzhibo90/gefpy_manylinux2014_x86_64:v3
+  os: ubuntu-20.04
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:

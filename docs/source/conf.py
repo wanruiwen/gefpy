@@ -38,15 +38,15 @@ release = '0.5.2'
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-#    'sphinx.ext.intersphinx',
+    'sphinx.ext.intersphinx',
 #    'sphinx.ext.doctest',
 #    'sphinx.ext.coverage',
-#    'sphinx.ext.mathjax',
+    'sphinx.ext.mathjax',
 #    'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
 #    'nbsphinx',
-#    "sphinx.ext.viewcode",
-#    "sphinx_autodoc_typehints",
+    "sphinx.ext.viewcode",
+    "sphinx_autodoc_typehints",
 #    *[p.stem for p in (HERE / 'extensions').glob('*.py')],
 ]
 #
