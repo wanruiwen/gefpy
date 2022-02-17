@@ -37,6 +37,7 @@ cdef class BgefR:
 
         :param filepath: Input bin GEF filepath.
         :param bin_size: Bin size.
+        :param n_thread: number of thread
         """
         pass
 

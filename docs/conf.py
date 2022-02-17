@@ -13,8 +13,9 @@
 import os
 import sys
 from pathlib import Path
+import sphinx_rtd_theme
 # sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../'))
 HERE = Path(__file__).parent
 sys.path[:0] = [str(HERE.parent), str(HERE / 'extensions')]
 
@@ -47,6 +48,7 @@ extensions = [
 #    'nbsphinx',
     "sphinx.ext.viewcode",
     "sphinx_autodoc_typehints",
+    "sphinx_rtd_theme",
 #    *[p.stem for p in (HERE / 'extensions').glob('*.py')],
 ]
 #
@@ -67,7 +69,7 @@ api_dir = HERE / 'api'  # function_images
 # The master toctree document.
 language = None
 
-#html_theme = 'sphinx_rtd_theme'
+html_theme = 'sphinx_rtd_theme'
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -75,9 +77,9 @@ language = None
 # a list of builtin themes.
 #
 #html_theme = 'alabaster'
-html_theme = 'default'
+#html_theme = 'default'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+#html_static_path = ['_static']

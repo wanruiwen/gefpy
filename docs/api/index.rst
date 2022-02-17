@@ -16,6 +16,7 @@ Bin GEF Reader
 This module supports reading common bin GEF files.
 
 .. autosummary::
+   :recursive:
    :toctree: .
 
    bgef_writer_cy
@@ -27,6 +28,7 @@ Bin GEF Writer
 This module supports writing common bin GEF files.
 
 .. autosummary::
+   :recursive:
    :toctree: .
 
    bgef_reader_cy.BgefR

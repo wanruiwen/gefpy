@@ -6,17 +6,14 @@
 Welcome to gefpy's documentation!
 =================================
 
-.. toctree::
-   :maxdepth: 5
-   :caption: Contents:
+gefpy is a thin, pythonic wrapper around geftools, which runs on Python 3 (3.7+).
 
-   General/Installation
-   api/index
 
 .. toctree::
    :maxdepth: 2
-   :caption: Tutorials
 
+   General/Installation
+   api/index
    release_note
 
 
