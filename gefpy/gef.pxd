@@ -9,6 +9,11 @@ cdef extern from "gef.h":
         unsigned int pos[2] # dnb coordinates x, y
         unsigned long long int pos_id
 
+    ctypedef struct Expression:
+        unsigned int x
+        unsigned int y
+        unsigned int count
+
     ctypedef struct CellExpData:
         unsigned short gene_id
         unsigned short count

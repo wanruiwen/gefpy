@@ -11,20 +11,27 @@
 from .bgef_reader cimport *
 import numpy as np
 cimport numpy as np
+import array
 
 from cython cimport view
 
+# EXP_DTYPE = np.dtype([
+#     ('x', np.uint32),
+#     ('y', np.uint32),
+#     ('count', np.uint32),
+# ])
+
 cdef class BgefR:
-    cdef BgefReader* c_bgef  # Hold a C++ instance which we're wrapping
+    cdef BgefReader* bgef_instance # Hold a C++ instance which we're wrapping
     cdef unsigned int exp_len
     cdef unsigned int gene_num
 
-    def __cinit__(self, filepath, bin_size):
-        self.c_bgef = new BgefReader(filepath, bin_size, True)
-        self.exp_len = self.c_bgef.getExpressionNum()
-        self.gene_num = self.c_bgef.getGeneNum()
+    def __cinit__(self, filepath, bin_size, n_thread):
+        self.bgef_instance = new BgefReader(filepath, bin_size, n_thread, True)
+        self.exp_len = self.bgef_instance.getExpressionNum()
+        self.gene_num = self.bgef_instance.getGeneNum()
 
-    def __init__(self, filepath, bin_size):
+    def __init__(self, filepath, bin_size, n_thread):
         """
         A class for reading common bin GEF.
 
@@ -34,35 +41,35 @@ cdef class BgefR:
         pass
 
     def __dealloc__(self):
-        del self.c_bgef
+        del self.bgef_instance
 
     def get_expression_num(self):
         """
         Get the number of expression.
         """
-        return self.c_bgef.getExpressionNum()
+        return self.bgef_instance.getExpressionNum()
 
     def get_cell_num(self):
         """
         Get the number of cell.
         """
-        return self.c_bgef.getCellNum()
+        return self.bgef_instance.getCellNum()
 
     def get_gene_num(self):
         """
         Get the number of gene.
         """
-        return self.c_bgef.getGeneNum()
+        return self.bgef_instance.getGeneNum()
 
     def get_gene_names(self):
         """
         Get an array of gene names.
         """
-        # cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
+        # cdef view.array gene_names = view.array((self.bgef_instance.getGeneNum(),),
         #                                         itemsize=32 * sizeof(char), format='32s', allocate_buffer=True)
         cdef vector[string] gene_names
         gene_names.reserve(self.gene_num)
-        self.c_bgef.getGeneNameList(gene_names)
+        self.bgef_instance.getGeneNameList(gene_names)
         return np.asarray(gene_names)
 
     def get_cell_names(self):
@@ -70,9 +77,9 @@ cdef class BgefR:
         Get an array of cell ids.
         """
         cdef unsigned long long int[::1] cell_names = np.empty(self.get_cell_num(), dtype=np.uint64)
-        # cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
+        # cdef view.array gene_names = view.array((self.bgef_instance.getGeneNum(),),
         #                                    itemsize=32*sizeof(char), format='32s', allocate_buffer=True)
-        self.c_bgef.getCellNameList(&cell_names[0])
+        self.bgef_instance.getCellNameList(&cell_names[0])
         return np.asarray(cell_names)
 
     def get_cell_names2(self, np.ndarray[np.ulonglong_t, ndim=1] cell_names):
@@ -80,15 +87,38 @@ cdef class BgefR:
         Get an array of cell ids.
         """
         # cdef unsigned long long int[::1] cell_names = np.empty(self.get_cell_num(), dtype=np.uint64)
-        # cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
+        # cdef view.array gene_names = view.array((self.bgef_instance.getGeneNum(),),
         #                                    itemsize=32*sizeof(char), format='32s', allocate_buffer=True)
-        self.c_bgef.getCellNameList(<unsigned long long int *>cell_names.data)
+        self.bgef_instance.getCellNameList(<unsigned long long int *>cell_names.data)
         # return np.asarray(cell_names)
 
     # def get_gene_data(self):
     #     cdef unsigned int[::1] gene_index = np.empty(self.exp_len, dtype=np.uint32)
-    #     cdef vector[string] uniq_genes = self.c_bgef.getSparseMatrixIndexesOfGene(&gene_index[0])
+    #     cdef vector[string] uniq_genes = self.bgef_instance.getSparseMatrixIndexesOfGene(&gene_index[0])
     #     return np.asarray(gene_index), np.asarray(uniq_genes)
+
+    # def get_expression(self, np.ndarray[np.uint32_t, ndim = 1] expression):
+    #     cdef Expression * exp = self.bgef_instance.getExpression()
+    #     for i in range(self.exp_len):
+    #         expression[3*i] = exp[i].x
+    #         expression[3*i+1] = exp[i].y
+    #         expression[3*i+2] = exp[i].count
+
+    def get_expression(self):
+        cdef view.array exp = view.array((self.exp_len,3),
+                                         itemsize=4*sizeof(char), format='I', allocate_buffer=False)
+        exp.data = <char*>self.bgef_instance.getExpression()
+        # arr = np.asarray(exp, dtype=EXP_DTYPE)
+        # arr.astype(EXP_DTYPE)
+        return np.asarray(exp)
+
+    def get_reduce_expression(self):
+        cdef view.array exp = view.array((self.get_cell_num(),3),
+                                         itemsize=4*sizeof(char), format='I', allocate_buffer=False)
+        exp.data = <char*>self.bgef_instance.getReduceExpression()
+        # arr = np.asarray(exp, dtype=EXP_DTYPE)
+        # arr.astype(EXP_DTYPE)
+        return np.asarray(exp)
 
     def get_sparse_matrix_indices(self):
         """
@@ -106,7 +136,7 @@ cdef class BgefR:
         cdef unsigned int[::1] indices = np.empty(self.exp_len, dtype=np.uint32)
         cdef unsigned int[::1] indptr = np.empty(self.gene_num + 1, dtype=np.uint32)
         cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
-        self.c_bgef.getSparseMatrixIndices(&indices[0], &indptr[0], &count[0])
+        self.bgef_instance.getSparseMatrixIndices(&indices[0], &indptr[0], &count[0])
         return np.asarray(indices), np.asarray(indptr), np.asarray(count)
 
     def get_sparse_matrix_indices2(self):
@@ -125,32 +155,32 @@ cdef class BgefR:
         cdef unsigned int[::1] cell_ind = np.empty(self.exp_len, dtype=np.uint32)
         cdef unsigned int[::1] gene_ind = np.empty(self.exp_len, dtype=np.uint32)
         cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
-        self.c_bgef.getSparseMatrixIndices2(&cell_ind[0], &gene_ind[0], &count[0])
+        self.bgef_instance.getSparseMatrixIndices2(&cell_ind[0], &gene_ind[0], &count[0])
         return np.asarray(cell_ind), np.asarray(gene_ind), np.asarray(count)
 
 
-    def get_sparse_matrix_indices_of_exp(self):
-        """
-        Get sparse matrix indexes of expression data.
+    # def get_sparse_matrix_indices_of_exp(self):
+    #     """
+    #     Get sparse matrix indexes of expression data.
+    #
+    #     :return: (uniq_cell, cell_index, count)
+    #     """
+    #     cdef unsigned int[::1] cell_index = np.empty(self.exp_len, dtype=np.uint32)
+    #     cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
+    #     cdef vector[unsigned long long] uniq_cell = self.bgef_instance.getSparseMatrixIndicesOfExp(&cell_index[0], &count[0])
+    #     return np.asarray(uniq_cell), np.asarray(cell_index), np.asarray(count)
 
-        :return: (uniq_cell, cell_index, count)
-        """
-        cdef unsigned int[::1] cell_index = np.empty(self.exp_len, dtype=np.uint32)
-        cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
-        cdef vector[unsigned long long] uniq_cell = self.c_bgef.getSparseMatrixIndicesOfExp(&cell_index[0], &count[0])
-        return np.asarray(uniq_cell), np.asarray(cell_index), np.asarray(count)
-
-    def get_sparse_matrix_indices_of_gene(self):
-        """
-        Get gene data.
-        :return: (gene_index, gene_names)
-        """
-        cdef unsigned int[::1] gene_index = np.empty(self.c_bgef.getGeneNum()+1, dtype=np.uint32)
-        cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
-                                           itemsize=32*sizeof(char), format='32s', allocate_buffer=True)
-
-        self.c_bgef.getSparseMatrixIndicesOfGene(&gene_index[0], gene_names.data)
-        return np.asarray(gene_index), np.asarray(gene_names)
+    # def get_sparse_matrix_indices_of_gene(self):
+    #     """
+    #     Get gene data.
+    #     :return: (gene_index, gene_names)
+    #     """
+    #     cdef unsigned int[::1] gene_index = np.empty(self.bgef_instance.getExpressionNum(), dtype=np.uint32)
+    #     cdef view.array gene_names = view.array((self.bgef_instance.getGeneNum(),),
+    #                                        itemsize=32*sizeof(char), format='32s', allocate_buffer=True)
+    #
+    #     self.bgef_instance.getSparseMatrixIndicesOfGene(&gene_index[0], <char*>gene_names.data)
+    #     return np.asarray(gene_index), np.asarray(gene_names)
 
 
     def read_whole_exp_matrix(self,
@@ -171,7 +201,7 @@ cdef class BgefR:
         :param matrix: When the value is greater than 255, it will be set to 255.
         :return:
         """
-        self.c_bgef.readWholeExpMatrix(offset_x, offset_y, rows, cols, key, <unsigned char*>matrix.data)
+        self.bgef_instance.readWholeExpMatrix(offset_x, offset_y, rows, cols, key, <unsigned char*>matrix.data)
 
 
     def read_whole_exp_matrix_all(self, str key):
@@ -182,7 +212,7 @@ cdef class BgefR:
         :return: 2D Matrix: When the value is greater than 255, it will be set to 255.
         """
         cdef np.ndarray[np.uint8_t, ndim = 2] matrix = np.empty(self.get_whole_exp_matrix_shape(), dtype=np.uint8)
-        self.c_bgef.readWholeExpMatrix(key, <unsigned char*>matrix.data)
+        self.bgef_instance.readWholeExpMatrix(key, <unsigned char*>matrix.data)
         return matrix
 
     def get_whole_exp_matrix_shape(self) -> np.ndarray:
@@ -191,5 +221,8 @@ cdef class BgefR:
         :return: [rows, cols]
         """
         cdef view.array shape = view.array((2,), itemsize=sizeof(unsigned int), format="I", allocate_buffer=False)
-        shape.data = <char *>self.c_bgef.getWholeExpMatrixShape()
+        shape.data = <char *>self.bgef_instance.getWholeExpMatrixShape()
         return np.asarray(shape)
+
+    def to_gem(self, filename):
+        self.bgef_instance.toGem(filename)

@@ -22,7 +22,7 @@ cdef class GEF:
     cdef unsigned int gene_num
 
     def __cinit__(self, filepath, bin_size):
-        self.c_bgef = new BgefReader(filepath, bin_size, True)
+        self.c_bgef = new BgefReader(filepath, bin_size, 1, True)
         self.exp_len = self.c_bgef.getExpressionNum()
         self.gene_num = self.c_bgef.getGeneNum()
 
@@ -72,9 +72,9 @@ cdef class GEF:
         Get gene data.
         :return: (gene_index, gene_names)
         """
-        cdef unsigned int[::1] gene_index = np.empty(self.c_bgef.getGeneNum()+1, dtype=np.uint32)
-        cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
-                                           itemsize=32*sizeof(char), format='32s', allocate_buffer=True)
+        cdef unsigned int[::1] gene_index = np.empty(self.c_bgef.getExpressionNum(), dtype=np.uint32)
+        # cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
+        #                                    itemsize=32*sizeof(char), format='32s', allocate_buffer=True)
 
-        self.c_bgef.getSparseMatrixIndicesOfGene(&gene_index[0], gene_names.data)
+        cdef vector[string] gene_names = self.c_bgef.getSparseMatrixIndicesOfGene(&gene_index[0])
         return np.asarray(gene_index), np.asarray(gene_names)

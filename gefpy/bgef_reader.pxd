@@ -7,14 +7,19 @@
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 from libcpp cimport bool
+from .gef cimport *
 
 
-cdef extern from "bgef_reader.h":
+cdef extern from "bgef_reader.h" nogil:
     cdef cppclass BgefReader:
-        BgefReader(const string& filename, int bin_size, bool verbose) except +
+        BgefReader(const string& filename, int bin_size, int n_thread, bool verbose) except +
         unsigned int getGeneNum() const
         unsigned int getCellNum()
         unsigned int getExpressionNum() const
+
+        Expression * getExpression()
+
+        Expression * getReduceExpression()
 
         void getGeneNameList(vector[string] & gene_list)
         void getCellNameList(unsigned long long int * cell_name_list)
@@ -27,14 +32,16 @@ cdef extern from "bgef_reader.h":
         int getSparseMatrixIndices(unsigned int *indices, unsigned int *indptr, unsigned int *count)
         int getSparseMatrixIndices2(unsigned int *cell_ind, unsigned int *gene_ind, unsigned int *count)
 
-        const unsigned int *getWholeExpMatrixShape() const
+        const unsigned int *getWholeExpMatrixShape()
 
         void readWholeExpMatrix(unsigned int offset_x,
                                 unsigned int offset_y,
                                 unsigned int rows,
                                 unsigned int cols,
                                 string & key,
-                                unsigned char *matrix) const
+                                unsigned char *matrix)
 
         void readWholeExpMatrix(string & key,
-                                unsigned char *matrix) const
+                                unsigned char *matrix)
+
+        unsigned int toGem(string & filename)
