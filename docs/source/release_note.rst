@@ -3,6 +3,11 @@ Release Notes
 
 .. role:: small
 
+0.5.2 :2022-02-17
+~~~~~~~~~~~~~~~~~~~~~~~~~
+- add stats plot
+- fix bug about H5F_CLOSE_STRONG
+- suport to_gem for bGEF
 
 0.3.2 :2022-01-26
 ~~~~~~~~~~~~~~~~~~~~~~~~~
