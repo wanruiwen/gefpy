@@ -40,13 +40,18 @@ def main():
     print(type(gene_names[0]))
 
     indices, indptr, count = cgef.get_sparse_matrix_indices(order='gene')
-    print(indices)
-    print(indices.shape)
-    print(indptr)
-    print("indptr.shape : ", indptr.shape)
-    print(count)
-    print(count.shape)
+    # gene为行, 第i行的cells ： 0-base
+    i = 1
+    print("含第i个基因的细胞索引: ", indices[indptr[i]:indptr[i+1]])
+    print("the cells : ", cells[indices[indptr[i]:indptr[i+1]]])
+    # print(indices)
+    # print(indices.shape)
+    # print(indptr)
+    # print("indptr.shape : ", indptr.shape)
+    # print(count)
+    # print(count.shape)
 
+    # 直接封装成scipy的sparse.csr_matrix
     from scipy import sparse
     test_csr = sparse.csr_matrix((count, indices, indptr), shape=(cgef.get_gene_num(), cgef.get_cell_num()))
      #     csr_matrix((data, indices, indptr), [shape=(M, N)])
@@ -55,10 +60,11 @@ def main():
      # |          corresponding values are stored in ``data[indptr[i]:indptr[i+1]]``.
      # |          If the shape parameter is not supplied, the matrix dimensions
      # |          are inferred from the index arrays.
+    # 更详细的信息，可查阅scipy的sparse.csr_matrix文档
     #
-    # print(indices[indptr[1]:indptr[2]])
-    # print(test_csr.shape)
-    # print(test_csr.getrow(1))
+    print(test_csr.shape)
+    print(test_csr.getrow(1))
+    print(test_csr.getcol(1))
     # (0, 16911)	1
     # 坐标， 值
     # print(test_csr.getrow(1)[0, 16911])
