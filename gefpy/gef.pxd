@@ -36,6 +36,7 @@ cdef extern from "gef.h":
         unsigned short dnb_count    #  Dnb number in this cell
         unsigned short area         #  The polygon area of this cell
         unsigned short cell_type_id #  Cell type ID to index the CellTypeList
+        unsigned short cluster_id #  Cell type ID to index the CellTypeList
 
     ctypedef struct GeneData:
         char gene_name[32]

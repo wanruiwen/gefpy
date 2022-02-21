@@ -27,7 +27,7 @@ cdef class BgefR:
     cdef unsigned int gene_num
 
     def __cinit__(self, filepath, bin_size, n_thread):
-        self.bgef_instance = new BgefReader(filepath, bin_size, n_thread, True)
+        self.bgef_instance = new BgefReader(filepath, bin_size, n_thread, False)
         self.exp_len = self.bgef_instance.getExpressionNum()
         self.gene_num = self.bgef_instance.getGeneNum()
 
@@ -37,6 +37,7 @@ cdef class BgefR:
 
         :param filepath: Input bin GEF filepath.
         :param bin_size: Bin size.
+        :param n_thread: number of thread
         """
         pass
 
@@ -85,6 +86,7 @@ cdef class BgefR:
     def get_cell_names2(self, np.ndarray[np.ulonglong_t, ndim=1] cell_names):
         """
         Get an array of cell ids.
+        :param cell_names:    cell names.
         """
         # cdef unsigned long long int[::1] cell_names = np.empty(self.get_cell_num(), dtype=np.uint64)
         # cdef view.array gene_names = view.array((self.bgef_instance.getGeneNum(),),

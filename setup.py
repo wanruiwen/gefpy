@@ -20,7 +20,7 @@ if os.name == 'nt':
 
 setup(
     name='gefpy',
-    version='0.5.2',
+    version='0.5.3',
     description='A thin, pythonic wrapper around geftool.',
     long_description=Path('README.md').read_text('utf-8'),
     long_description_content_type="text/markdown",
@@ -37,7 +37,7 @@ setup(
         "pandas"
     ],
     extras_require=dict(
-        doc=['sphinx>=3.2'],
+        docs=['sphinx>=3.2'],
         test=['pytest>=4.4', 'pytest-nunit'],
     ),
     packages=find_packages(),

@@ -1,29 +1,29 @@
+# -*- coding: utf-8 -*-
 # distutils: language=c++
-# cython: language_level=3
+# cython: language_level=3, boundscheck=False
+# cython: c_string_type=unicode, c_string_encoding=utf8
+# Created by huangzhibo on 2022/01/01
 """
     Provides access to the cgef_reader interface.
 """
 
 from .cgef_reader cimport *
+import numpy as np
+cimport numpy as np
 from cython cimport view
 
 
 cdef class CgefR:
     cdef CgefReader* cgef_instance  # Hold a C++ instance which we're wrapping
-    cdef unsigned int exp_len
-    cdef unsigned int gene_num
 
-    def __cinit__(self, filepath, bin_size):
-        self.cgef_instance = new CgefReader(filepath, bin_size)
-        self.exp_len = self.cgef_instance.getExpressionNum()
-        self.gene_num = self.cgef_instance.getGeneNum()
+    def __cinit__(self, filepath, verbose = False):
+        self.cgef_instance = new CgefReader(filepath, verbose)
 
-    def __init__(self, filepath, bin_size):
+    def __init__(self, filepath, verbose = False):
         """
-        A class for reading common bin GEF.
+        A class for reading cell bin GEF.
 
-        :param filepath: Input bin GEF filepath.
-        :param bin_size: Bin size.
+        :param filepath: Input cell bin GEF filepath.
         """
         pass
 
@@ -51,12 +51,15 @@ cdef class CgefR:
     def get_gene_names(self):
         """
         Get an array of gene names.
+        The type of gene name is bytes.
         """
-        # cdef view.array gene_names = view.array((self.c_bgef.getGeneNum(),),
-        #                                         itemsize=32 * sizeof(char), format='32s', allocate_buffer=True)
-        cdef vector[string] gene_names
-        gene_names.reserve(self.gene_num)
-        self.cgef_instance.getGeneNameList(gene_names)
+    #     cdef vector[string] gene_names
+    #     gene_names.reserve(self.cgef_instance.getGeneNum())
+    #     self.cgef_instance.getGeneNameList(gene_names)
+        # below is faster method
+        cdef view.array gene_names = view.array((self.cgef_instance.getGeneNum(),),
+                                                itemsize=32 * sizeof(char), format='32s', allocate_buffer=True)
+        self.cgef_instance.getGeneNames(gene_names.data)
         return np.asarray(gene_names)
 
     def get_cell_names(self):
@@ -67,11 +70,41 @@ cdef class CgefR:
         self.cgef_instance.getCellNameList(&cell_names[0])
         return np.asarray(cell_names)
 
-    # def get_cell(self):
-        # cdef view.array cells = view.array((self.cgef_instance.getCellNum(),),
-        #                                    itemsize=sizeof(CellData), format=CellData, allocate_buffer=True)
-        # cells.data = <char*>self.cgef_instance.getCell()
-        # return np.asarray(self.cgef_instance.getCell())
+    def get_cells(self):
+        """
+        Get cells.
+        """
+        data_format="""I:x:
+        I:y:
+        I:offset:
+        H:gene_count:
+        H:exp_count:
+        H:dnb_count:
+        H:area:
+        H:cell_type_id:
+        H:cluster_id:
+        """
+        # 可从hdf5 datatset中获取datatype
+        # 或许可以参考h5py的方法，自动判断
+        cdef view.array cells = view.array((self.cgef_instance.getCellNum(),),
+                                           itemsize=sizeof(CellData), format=data_format, allocate_buffer=False)
+        cells.data = <char*>self.cgef_instance.getCell()
+        return np.asarray(cells)
+
+    def get_genes(self):
+        """
+        Get genes.
+        """
+        data_format="""32s:gene_name:
+        I:offset:
+        I:cell_count:
+        I:exp_count:
+        H:max_mid_count:
+        """
+        cdef view.array genes = view.array((self.cgef_instance.getCellNum(),),
+                                           itemsize=sizeof(GeneData), format=data_format, allocate_buffer=False)
+        genes.data = <char*>self.cgef_instance.getGene()
+        return np.asarray(genes)
 
     def get_sparse_matrix_indices(self, str order = 'gene'):
         """
@@ -87,15 +120,17 @@ cdef class CgefR:
         :param order:    Order of count, "gene" or "cell".
         :return: (indices, indptr, count, order)
         """
-        cdef unsigned int[::1] indices = np.empty(self.exp_len, dtype=np.uint32)
-        cdef unsigned int[::1] indptr = np.empty(self.gene_num + 1, dtype=np.uint32)
-        cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
+        indptr_len = self.cgef_instance.getGeneNum() + 1 if order == 'gene' else self.cgef_instance.getCellNum() + 1
+        cdef unsigned int[::1] indices = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint32)
+        cdef unsigned int[::1] indptr = np.empty(indptr_len, dtype=np.uint32)
+        cdef unsigned int[::1] count = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint32)
         self.cgef_instance.getSparseMatrixIndices(&indices[0], &indptr[0], &count[0], order)
         return np.asarray(indices), np.asarray(indptr), np.asarray(count)
 
     def get_sparse_matrix_indices2(self):
         """
         Gets indices for building csr_matrix.
+        restrict_region and restrict_gene is "invalid" for this function.
 
         Examples:
         from scipy import sparse
@@ -106,17 +141,45 @@ cdef class CgefR:
         :param count:     CSR format data array of the matrix. Expression count.
         :return: (cell_ind, gene_ind, count)
         """
-        cdef unsigned int[::1] cell_ind = np.empty(self.exp_len, dtype=np.uint32)
-        cdef unsigned int[::1] gene_ind = np.empty(self.exp_len, dtype=np.uint32)
-        cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
+        cdef unsigned int[::1] cell_ind = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint32)
+        cdef unsigned int[::1] gene_ind = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint32)
+        cdef unsigned int[::1] count = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint32)
         self.cgef_instance.getSparseMatrixIndices2(&cell_ind[0], &gene_ind[0], &count[0])
         return np.asarray(cell_ind), np.asarray(gene_ind), np.asarray(count)
 
     def restrict_region(self, min_x, max_x, min_y, max_y):
+        """
+        Restrict to the input region.
+        Some member variables (e.g. cell_num_) of this class will be updated.
+
+        :param min_x:
+        :param max_x:
+        :param min_y:
+        :param max_y:
+        """
         self.cgef_instance.restrictRegion(min_x, max_x, min_y, max_y)
 
-    def restrict_gene(self, vector[string] & gene_list):
-        self.cgef_instance.restrictGene(gene_list, False)
+    # TODO fix
+    # def restrict_gene(self, vector[string] & gene_list):
+    #     """
+    #     Restrict to a gene list.
+    #
+    #     :param gene_list: A list of gene_names
+    #     """
+    #     self.cgef_instance.restrictGene(gene_list, False)
+
+    def update_gene_info(self):
+        """
+        Delete genes with zero expression after restrict_region.
+        """
+        self.cgef_instance.updateGeneInfo()
+
+    def free_restriction(self):
+        """
+        Free restrict_region and restrict_gene.
+        Must call this function before reuse restrict_*.
+        """
+        self.cgef_instance.freeRestriction()
 
     def get_cellid_and_count(self):
         """
@@ -124,8 +187,8 @@ cdef class CgefR:
 
         :return:  (cell_id, count)
         """
-        cdef unsigned int[::1] cell_id = np.empty(self.exp_len, dtype=np.uint32)
-        cdef unsigned short[::1] count = np.empty(self.exp_len, dtype=np.uint16)
+        cdef unsigned int[::1] cell_id = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint32)
+        cdef unsigned short[::1] count = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint16)
         self.cgef_instance.getCellIdAndCount(&cell_id[0], &count[0])
         return np.asarray(cell_id), np.asarray(count)
 
@@ -135,12 +198,8 @@ cdef class CgefR:
         
         :return:  (gene_id, count)
         """
-        cdef unsigned short[::1] gene_id = np.empty(self.exp_len, dtype=np.uint16)
-        cdef unsigned short[::1] count = np.empty(self.exp_len, dtype=np.uint16)
+        cdef unsigned short[::1] gene_id = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint16)
+        cdef unsigned short[::1] count = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint16)
         self.cgef_instance.getGeneIdAndCount(&gene_id[0], &count[0])
         return np.asarray(gene_id), np.asarray(count)
-
-
-
-
 

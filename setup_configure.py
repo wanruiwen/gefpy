@@ -49,7 +49,8 @@ class BuildConfig:
         gef_lib = []
 
         if not opencv:
-            raise ValueError("Specify OpenCV_DIR")
+            #raise ValueError("Specify OpenCV_DIR")
+            print("[WARN] OpenCV_DIR value is empty.")
         else:
             cv_inc = [op.join(opencv, 'include/opencv4')]
 
