@@ -27,7 +27,7 @@ cdef class BgefR:
     cdef unsigned int gene_num
 
     def __cinit__(self, filepath, bin_size, n_thread):
-        self.bgef_instance = new BgefReader(filepath, bin_size, n_thread, True)
+        self.bgef_instance = new BgefReader(filepath, bin_size, n_thread, False)
         self.exp_len = self.bgef_instance.getExpressionNum()
         self.gene_num = self.bgef_instance.getGeneNum()
 

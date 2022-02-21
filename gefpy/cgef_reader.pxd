@@ -25,6 +25,7 @@ cdef extern from "cgef_reader.h" nogil:
         CellData getCell(unsigned int cell_id) const
 
         void getGeneNameList(vector[string] & gene_list)
+        void getGeneNames(char * gene_list)
         void getCellNameList(unsigned long long int * cell_name_list)
 
         int getSparseMatrixIndices(unsigned int * indices,
@@ -37,6 +38,14 @@ cdef extern from "cgef_reader.h" nogil:
         void restrictRegion(unsigned int min_x, unsigned int max_x, unsigned int min_y, unsigned int max_y)
 
         void restrictGene(vector[string] & gene_list, bool exclude)
+
+        bool isRestrictRegion() const
+
+        bool isRestrictGene() const
+
+        void updateGeneInfo()
+
+        void freeRestriction()
 
         void getCellIdAndCount(unsigned int *cell_id, unsigned short *count) const
 
