@@ -228,3 +228,12 @@ cdef class BgefR:
 
     def to_gem(self, filename):
         self.bgef_instance.toGem(filename)
+
+    def get_genedata_in_region(self, min_x, max_x, min_y, max_y, key):
+        """
+        Get the gene exp matrix.
+        :return: [x, y, umicnt]
+        """
+        cdef vector[Expression] gene_data
+        self.bgef_instance.getGeneExpInRegion(min_x, max_x, min_y, max_y, key, gene_data)
+        return np.asarray(gene_data)
