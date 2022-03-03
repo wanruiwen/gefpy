@@ -77,12 +77,12 @@ cdef class CgefR:
         data_format="""I:x:
         I:y:
         I:offset:
-        H:gene_count:
-        H:exp_count:
-        H:dnb_count:
+        H:geneCount:
+        H:expCount:
+        H:dnbCount:
         H:area:
-        H:cell_type_id:
-        H:cluster_id:
+        H:cellTypeID:
+        H:clusterID:
         """
         # 可从hdf5 datatset中获取datatype
         # 或许可以参考h5py的方法，自动判断
@@ -95,11 +95,11 @@ cdef class CgefR:
         """
         Get genes.
         """
-        data_format="""32s:gene_name:
+        data_format="""32s:geneName:
         I:offset:
-        I:cell_count:
-        I:exp_count:
-        H:max_mid_count:
+        I:cellCount:
+        I:expCount:
+        H:maxMIDcount:
         """
         cdef view.array genes = view.array((self.cgef_instance.getCellNum(),),
                                            itemsize=sizeof(GeneData), format=data_format, allocate_buffer=False)
@@ -202,4 +202,19 @@ cdef class CgefR:
         cdef unsigned short[::1] count = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint16)
         self.cgef_instance.getGeneIdAndCount(&gene_id[0], &count[0])
         return np.asarray(gene_id), np.asarray(count)
+
+    def cgef_close(self):
+        self.cgef_instance.closeH5()
+
+    def get_cellborders(self):
+        """
+        Gets cell borders.
+        
+        :return:  (borders)
+        """
+
+        cdef view.array borders = view.array((self.cgef_instance.getCellNum(),16,2),
+                                           itemsize=sizeof(char), format='B', allocate_buffer=False)
+        borders.data = self.cgef_instance.getCellBorders(True, 0)
+        return np.asarray(borders)
 
