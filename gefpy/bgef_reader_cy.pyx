@@ -237,3 +237,8 @@ cdef class BgefR:
         cdef vector[Expression] gene_data
         self.bgef_instance.getGeneExpInRegion(min_x, max_x, min_y, max_y, key, gene_data)
         return np.asarray(gene_data)
+
+    def get_offset(self):
+        cdef int offval[2]
+        self.bgef_instance.getOffset(offval)
+        return offval[0], offval[1]

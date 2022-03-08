@@ -48,3 +48,5 @@ cdef extern from "bgef_reader.h" nogil:
         
         void getGeneExpInRegion(unsigned int min_x,unsigned int min_y, unsigned int max_x, unsigned int max_y, 
                                 string &strgene, vector[Expression] &outExp);
+        
+        void getOffset(int *data)
