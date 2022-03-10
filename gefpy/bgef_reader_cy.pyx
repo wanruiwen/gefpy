@@ -94,10 +94,14 @@ cdef class BgefR:
         self.bgef_instance.getCellNameList(<unsigned long long int *>cell_names.data)
         # return np.asarray(cell_names)
 
-    # def get_gene_data(self):
-    #     cdef unsigned int[::1] gene_index = np.empty(self.exp_len, dtype=np.uint32)
-    #     cdef vector[string] uniq_genes = self.bgef_instance.getSparseMatrixIndexesOfGene(&gene_index[0])
-    #     return np.asarray(gene_index), np.asarray(uniq_genes)
+    def get_gene_data(self):
+        """
+        Get gene data.
+        :return: (gene_index, gene_names)
+        """
+        cdef unsigned int[::1] gene_index = np.empty(self.exp_len, dtype=np.uint32)
+        cdef vector[string] gene_names = self.bgef_instance.getSparseMatrixIndicesOfGene(&gene_index[0])
+        return np.asarray(gene_index), np.asarray(gene_names)
 
     # def get_expression(self, np.ndarray[np.uint32_t, ndim = 1] expression):
     #     cdef Expression * exp = self.bgef_instance.getExpression()
@@ -161,16 +165,16 @@ cdef class BgefR:
         return np.asarray(cell_ind), np.asarray(gene_ind), np.asarray(count)
 
 
-    # def get_sparse_matrix_indices_of_exp(self):
-    #     """
-    #     Get sparse matrix indexes of expression data.
-    #
-    #     :return: (uniq_cell, cell_index, count)
-    #     """
-    #     cdef unsigned int[::1] cell_index = np.empty(self.exp_len, dtype=np.uint32)
-    #     cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
-    #     cdef vector[unsigned long long] uniq_cell = self.bgef_instance.getSparseMatrixIndicesOfExp(&cell_index[0], &count[0])
-    #     return np.asarray(uniq_cell), np.asarray(cell_index), np.asarray(count)
+    def get_exp_data(self):
+        """
+        Get sparse matrix indexes of expression data.
+    
+        :return: (uniq_cell, cell_index, count)
+        """
+        cdef unsigned int[::1] cell_index = np.empty(self.exp_len, dtype=np.uint32)
+        cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
+        cdef vector[unsigned long long] uniq_cell = self.bgef_instance.getSparseMatrixIndicesOfExp(&cell_index[0], &count[0])
+        return np.asarray(uniq_cell), np.asarray(cell_index), np.asarray(count)
 
     # def get_sparse_matrix_indices_of_gene(self):
     #     """
