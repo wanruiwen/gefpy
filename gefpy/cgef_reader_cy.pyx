@@ -214,7 +214,7 @@ cdef class CgefR:
         """
 
         cdef view.array borders = view.array((self.cgef_instance.getCellNum(),16,2),
-                                           itemsize=sizeof(char), format='B', allocate_buffer=False)
+                                           itemsize=sizeof(char), format='b', allocate_buffer=False)
         borders.data = self.cgef_instance.getCellBorders(True, 0)
         return np.asarray(borders)
 
