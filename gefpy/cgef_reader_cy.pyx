@@ -86,10 +86,14 @@ cdef class CgefR:
         """
         # 可从hdf5 datatset中获取datatype
         # 或许可以参考h5py的方法，自动判断
-        cdef view.array cells = view.array((self.cgef_instance.getCellNum(),),
-                                           itemsize=sizeof(CellData), format=data_format, allocate_buffer=False)
-        cells.data = <char*>self.cgef_instance.getCell()
-        return np.asarray(cells)
+        cdef int cnum = self.cgef_instance.getCellNum()
+        cdef view.array cells
+        if cnum != 0:
+            cells= view.array((cnum,), itemsize=sizeof(CellData), format=data_format, allocate_buffer=False)
+            cells.data = <char*>self.cgef_instance.getCell()
+            return np.asarray(cells)
+        else:
+            return np.array([])
 
     def get_genes(self):
         """
