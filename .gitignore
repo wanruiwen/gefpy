@@ -136,3 +136,4 @@ test_data/
 main.py
 main2.py
 .DS_Store
+.vscode
