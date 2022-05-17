@@ -10,8 +10,8 @@ cdef extern from "gef.h":
         unsigned long long int pos_id
 
     ctypedef struct Expression:
-        unsigned int x
-        unsigned int y
+        int x
+        int y
         unsigned int count
 
     ctypedef struct CellExpData:
@@ -28,8 +28,9 @@ cdef extern from "gef.h":
         unsigned int count
 
     ctypedef struct CellData:
-        unsigned int x              # Coordinate X of center point in this cell
-        unsigned int y              # Coordinate Y of center point in this cell
+        unsigned int id
+        int x              # Coordinate X of center point in this cell
+        int y              # Coordinate Y of center point in this cell
         unsigned int offset         # Offset of current cell in cellExp, 0-based
         unsigned short gene_count   # The number of gene in this cell
         unsigned short exp_count    #  The total expression count of all genes in this cell

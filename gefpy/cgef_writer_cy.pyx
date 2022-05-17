@@ -22,4 +22,5 @@ def generate_cgef(cgef_file, bgef_file, mask_file, block_size: list):
     :return:
     """
     cdef int[::1] bsize = np.array(block_size, dtype=np.int32)
-    generateCgef(cgef_file, bgef_file, mask_file, &bsize[0], True)
+    cdef char *rawstr = ""
+    generateCgef(cgef_file, bgef_file, mask_file, rawstr, &bsize[0], 0, True)

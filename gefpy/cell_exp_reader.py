@@ -1,3 +1,10 @@
+'''
+Author: zhaozijian
+Date: 2022-02-11 10:19:08
+LastEditors: zhaozijian
+LastEditTime: 2022-03-18 14:37:19
+Description: file content
+'''
 # -*- coding: utf-8 -*-
 import h5py
 import numpy as np
@@ -15,6 +22,7 @@ class CellExpReader(object):
         self.cols = None
         self.count = None
         self.positions = None
+        self.cluster = None
         self._init()
 
     def _init(self):
@@ -26,6 +34,7 @@ class CellExpReader(object):
             self.gene_num = self.genes.shape[0]
             x = np.array(h5f['cellBin']['cell']['x'],  dtype='uint32')
             y = np.array(h5f['cellBin']['cell']['y'],  dtype='uint32')
+            self.cluster = np.array(h5f['cellBin']['cell']['clusterID'], dtype='uint16')
 
             self.cell_num = len(x)
             self.positions = np.zeros((self.cell_num, 2))

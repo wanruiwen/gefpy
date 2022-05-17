@@ -11,7 +11,9 @@ cdef extern from "main_cgef.h" nogil:
     int generateCgef(const string& cgef_file,
                      const string& bgef_file,
                      const string& mask_file,
+                     const string& raw_gem,
                      const int* block_size,
+                     int celltype,
                      bool verbose);
 
 

@@ -173,7 +173,9 @@ cdef class BgefR:
         """
         cdef unsigned int[::1] cell_index = np.empty(self.exp_len, dtype=np.uint32)
         cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
-        cdef vector[unsigned long long] uniq_cell = self.bgef_instance.getSparseMatrixIndicesOfExp(&cell_index[0], &count[0])
+        cdef vector[unsigned long long] uniq_cell
+        uniq_cell.reserve(self.exp_len)
+        self.bgef_instance.getSparseMatrixIndicesOfExp(uniq_cell, &cell_index[0], &count[0])
         return np.asarray(uniq_cell), np.asarray(cell_index), np.asarray(count)
 
     # def get_sparse_matrix_indices_of_gene(self):
@@ -230,8 +232,8 @@ cdef class BgefR:
         shape.data = <char *>self.bgef_instance.getWholeExpMatrixShape()
         return np.asarray(shape)
 
-    def to_gem(self, filename):
-        self.bgef_instance.toGem(filename)
+    def to_gem(self, filename, sn):
+        self.bgef_instance.toGem(filename, sn)
 
     def get_genedata_in_region(self, min_x, max_x, min_y, max_y, key):
         """
@@ -246,3 +248,8 @@ cdef class BgefR:
         cdef int offval[2]
         self.bgef_instance.getOffset(offval)
         return offval[0], offval[1]
+	
+    def get_exp_attr(self):
+        cdef int offval[6]
+        self.bgef_instance.getExpAttr(offval)
+        return offval[0], offval[1], offval[2], offval[3], offval[4], offval[5]

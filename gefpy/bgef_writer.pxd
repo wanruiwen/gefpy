@@ -12,12 +12,17 @@ cdef extern from "main_bgef.h" nogil:
                      const string & bgef_file,
                      int n_thread,
                      vector[unsigned int] bin_sizes,
-                     vector[unsigned int] region)
+                     vector[int] region)
 
     int generateBgef(const string & input_file,
                      const string & bgef_file,
                      int n_thread,
                      vector[unsigned int] bin_sizes)
+
+#    void StereoDataToGef(const string & input_file,
+#                     int binsize,
+#                     int sz,
+#                     unsigned long *cellptr)
 
 
 cdef extern from "bgef_writer.h" nogil:

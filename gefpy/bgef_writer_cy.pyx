@@ -7,6 +7,7 @@
 """
 
 from .bgef_writer cimport *
+cimport numpy as np
 
 
 def generate_bgef(input_file, bgef_file,  n_thread = 8, bin_sizes = None, region = None):
@@ -29,3 +30,6 @@ def generate_bgef(input_file, bgef_file,  n_thread = 8, bin_sizes = None, region
         generateBgef(input_file, bgef_file, n_thread, bin_sizes_tmp)
     else:
         generateBgef(input_file, bgef_file, n_thread, bin_sizes_tmp, region)
+
+#def SdDataToGef(out_file, bin_size, sz, np.ndarray[unsigned long, ndim=1] cells):
+#    StereoDataToGef(out_file, bin_size, sz, &cells[0])

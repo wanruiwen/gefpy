@@ -54,4 +54,6 @@ cdef extern from "cgef_reader.h" nogil:
         void closeH5()
 
         char* getCellBorders(bool ball, unsigned int cell_id)
+        
+        #void setBgefpath(string &filename)
 

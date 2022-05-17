@@ -74,7 +74,8 @@ cdef class CgefR:
         """
         Get cells.
         """
-        data_format="""I:x:
+        data_format="""I:id:
+        I:x:
         I:y:
         I:offset:
         H:geneCount:
@@ -221,4 +222,7 @@ cdef class CgefR:
                                            itemsize=sizeof(char), format='b', allocate_buffer=False)
         borders.data = self.cgef_instance.getCellBorders(True, 0)
         return np.asarray(borders)
+
+    #def set_bgef_path(self, bgef):
+    #    self.cgef_instance.setBgefpath(bgef)
 

@@ -64,7 +64,9 @@ cdef class GEF:
         """
         cdef unsigned int[::1] cell_index = np.empty(self.exp_len, dtype=np.uint32)
         cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
-        cdef vector[unsigned long long] uniq_cell = self.c_bgef.getSparseMatrixIndicesOfExp(&cell_index[0], &count[0])
+        cdef vector[unsigned long long] uniq_cell
+        uniq_cell.reserve(self.exp_len)
+        self.c_bgef.getSparseMatrixIndicesOfExp(uniq_cell, &cell_index[0], &count[0])
         return np.asarray(uniq_cell), np.asarray(cell_index), np.asarray(count)
 
     def get_gene_data(self):

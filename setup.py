@@ -1,3 +1,10 @@
+'''
+Author: zhaozijian
+Date: 2022-02-11 10:19:08
+LastEditors: zhaozijian
+LastEditTime: 2022-05-16 10:29:32
+Description: file content
+'''
 #!/usr/bin/env python3
 # coding: utf-8
 from setuptools import Extension, setup, find_packages
@@ -20,7 +27,7 @@ if os.name == 'nt':
 
 setup(
     name='gefpy',
-    version='0.5.3',
+    version='0.5.4.6',
     description='A thin, pythonic wrapper around geftool.',
     long_description=Path('README.md').read_text('utf-8'),
     long_description_content_type="text/markdown",
