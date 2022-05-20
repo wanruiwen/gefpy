@@ -45,3 +45,14 @@ cdef extern from "gef.h":
         unsigned int cell_count
         unsigned int exp_count
         unsigned short max_mid_count
+
+    ctypedef struct Cell:
+        unsigned int cellid
+        unsigned int offset
+        unsigned int count
+
+    ctypedef struct DnbExpression:
+        int x
+        int y
+        unsigned short count
+        unsigned short gene_id

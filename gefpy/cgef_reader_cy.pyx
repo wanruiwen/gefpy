@@ -217,12 +217,17 @@ cdef class CgefR:
         
         :return:  (borders)
         """
-
-        cdef view.array borders = view.array((self.cgef_instance.getCellNum(),16,2),
-                                           itemsize=sizeof(char), format='b', allocate_buffer=False)
-        borders.data = self.cgef_instance.getCellBorders(True, 0)
+        cdef unsigned int *ver = self.cgef_instance.getGefVer()
+        cdef view.array borders
+        if ver[1]==6 and ver[2] < 3:
+            borders = view.array((self.cgef_instance.getCellNum(),16,2),
+                                            itemsize=sizeof(char), format='b', allocate_buffer=False)
+            borders.data = self.cgef_instance.getCellBorders_char(True, 0)
+        else:
+            borders = view.array((self.cgef_instance.getCellNum(),32,2),
+                                            itemsize=sizeof(short), format='h', allocate_buffer=False)
+            borders.data = <char*>self.cgef_instance.getCellBorders_short(True, 0)
         return np.asarray(borders)
+    
 
-    #def set_bgef_path(self, bgef):
-    #    self.cgef_instance.setBgefpath(bgef)
 

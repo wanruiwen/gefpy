@@ -53,7 +53,8 @@ cdef extern from "cgef_reader.h" nogil:
 
         void closeH5()
 
-        char* getCellBorders(bool ball, unsigned int cell_id)
+        char* getCellBorders_char(bool ball, unsigned int cell_id)
+        short* getCellBorders_short(bool ball, unsigned int cell_id)
         
-        #void setBgefpath(string &filename)
+        unsigned int* getGefVer()
 
