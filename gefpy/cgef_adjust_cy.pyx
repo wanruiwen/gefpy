@@ -37,30 +37,7 @@ cdef class CgefAdjust:
         self.c_instance.getCellLabelgem(genelist, vec_cell)
         return np.asarray(genelist), np.asarray(vec_cell)
 
-    def write_cgef_adjustdata(self):
-        cdef vector[Cell] veccell
-        cdef Cell c1
-        c1.cellid = 0
-        c1.offset = 0
-        c1.count = 2
-        cdef Cell c2
-        c2.cellid = 0
-        c2.offset = 2
-        c2.count = 3
-        veccell.push_back(c1)
-        veccell.push_back(c2)
-
-        cdef vector[DnbExpression] vecdnb
-        cdef DnbExpression dnb1
-        dnb1.x = 112
-        dnb1.y = 122
-        dnb1.count = 1
-        dnb1.gene_id = 0
-        cdef DnbExpression dnb2
-        dnb2.x = 149
-        dnb2.y = 150
-        dnb2.count = 2
-        dnb2.gene_id = 0
-        vecdnb.push_back(dnb1)
-        vecdnb.push_back(dnb2)
-        self.c_instance.writeCellAdjust(veccell, vecdnb)
+    def write_cgef_adjustdata(self, path, celldata, dnbdata):
+        cdef Cell [:] cell = celldata
+        cdef DnbExpression [:] dnb = dnbdata
+        self.c_instance.writeCellAdjust(path, &cell[0], cell.shape[0], &dnb[0], dnb.shape[0])

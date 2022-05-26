@@ -25,4 +25,4 @@ cdef extern from "cellAdjust.h" nogil:
         void readBgef(const string &strinput)
         void readCgef(const string &strinput)
         unsigned int getCellLabelgem(vector[string] &gene_list, vector[cellgem_label] &vecCellgem)
-        void writeCellAdjust(vector[Cell] &veccell, vector[DnbExpression] &vecDnb)
+        void writeCellAdjust(const string &path, Cell *cellptr, int cellcnt, DnbExpression *dnbptr, int dnbcnt)
