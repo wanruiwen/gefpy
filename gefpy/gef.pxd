@@ -13,6 +13,7 @@ cdef extern from "gef.h":
         int x
         int y
         unsigned int count
+        unsigned int exon
 
     ctypedef struct CellExpData:
         unsigned short gene_id
