@@ -24,7 +24,8 @@ def generate_bgef(input_file, bgef_file,  n_thread = 8, bin_sizes = None, region
     if bin_sizes is None:
         bin_sizes_tmp = {1, 10, 20, 50, 100, 200, 500}
     else:
-        bin_sizes_tmp = bin_sizes
+        #bin_sizes_tmp = bin_sizes
+        bin_sizes_tmp.push_back(bin_sizes)
 
     if region is None:
         generateBgef(input_file, bgef_file, n_thread, bin_sizes_tmp)

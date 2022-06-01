@@ -90,7 +90,9 @@ class gefpy_build_ext(build_ext):
             Extension('gefpy.cgef_reader_cy',
                       [localpath('gefpy', 'cgef_reader_cy.pyx')], **settings),
             Extension('gefpy.cgef_writer_cy',
-                      [localpath('gefpy', 'cgef_writer_cy.pyx')], **settings)
+                      [localpath('gefpy', 'cgef_writer_cy.pyx')], **settings),
+            Extension('gefpy.cgef_adjust_cy',
+                      [localpath('gefpy', 'cgef_adjust_cy.pyx')], **settings)
         ]
 
         return extensions
