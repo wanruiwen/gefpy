@@ -3,6 +3,12 @@ Release Notes
 
 .. role:: small
 
+0.5.4.8 :2022-06-01
+~~~~~~~~~~~~~~~~~~~~~~~~~
+- add cell adjust
+- add cgef to cgem
+- fix some bugs
+
 0.5.2 :2022-02-17
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 - add stats plot

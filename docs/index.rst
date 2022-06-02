@@ -13,7 +13,7 @@ gefpy is a thin, pythonic wrapper around geftools, which runs on Python 3 (3.7+)
    :maxdepth: 2
 
    General/Installation
-   api/index
+   api/gefpy
    release_note
 
 

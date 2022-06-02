@@ -86,6 +86,7 @@ cdef class BgefR:
     def get_cell_names2(self, np.ndarray[np.ulonglong_t, ndim=1] cell_names):
         """
         Get an array of cell ids.
+
         :param cell_names:    cell names.
         """
         # cdef unsigned long long int[::1] cell_names = np.empty(self.get_cell_num(), dtype=np.uint64)
@@ -103,14 +104,12 @@ cdef class BgefR:
         cdef vector[string] gene_names = self.bgef_instance.getSparseMatrixIndicesOfGene(&gene_index[0])
         return np.asarray(gene_index), np.asarray(gene_names)
 
-    # def get_expression(self, np.ndarray[np.uint32_t, ndim = 1] expression):
-    #     cdef Expression * exp = self.bgef_instance.getExpression()
-    #     for i in range(self.exp_len):
-    #         expression[3*i] = exp[i].x
-    #         expression[3*i+1] = exp[i].y
-    #         expression[3*i+2] = exp[i].count
-
     def get_expression(self):
+        """
+        Get the all expression from bgef.
+
+        :return: exp
+        """
         cdef view.array exp = view.array((self.exp_len,3),
                                          itemsize=4*sizeof(char), format='I', allocate_buffer=False)
         exp.data = <char*>self.bgef_instance.getExpression()
@@ -118,13 +117,13 @@ cdef class BgefR:
         # arr.astype(EXP_DTYPE)
         return np.asarray(exp)
 
-    def get_reduce_expression(self):
-        cdef view.array exp = view.array((self.get_cell_num(),3),
-                                         itemsize=4*sizeof(char), format='I', allocate_buffer=False)
-        exp.data = <char*>self.bgef_instance.getReduceExpression()
+    #def get_reduce_expression(self):
+    #    cdef view.array exp = view.array((self.get_cell_num(),3),
+    #                                     itemsize=4*sizeof(char), format='I', allocate_buffer=False)
+    #    exp.data = <char*>self.bgef_instance.getReduceExpression()
         # arr = np.asarray(exp, dtype=EXP_DTYPE)
         # arr.astype(EXP_DTYPE)
-        return np.asarray(exp)
+    #    return np.asarray(exp)
 
     def get_sparse_matrix_indices(self):
         """
@@ -135,7 +134,7 @@ cdef class BgefR:
         sparse.csr_matrix((count, indices, indptr), shape=(cell_num, gene_num))
 
         :param indices:  CSR format index array of the matrix. Cell id array, the column indices, is the same size as count.
-        :param indptr:   CSR format index pointer array of the matrix. indptr length = gene_num_ + 1 .
+        :param indptr:   CSR format index pointer array of the matrix. indptr length = gene_num + 1 .
         :param count:    CSR format data array of the matrix. Expression count.
         :return: (indices, indptr, count)
         """
@@ -233,6 +232,13 @@ cdef class BgefR:
         return np.asarray(shape)
 
     def to_gem(self, filename, sn):
+        """
+        Convert bgef data to gem
+
+        :param filename: set out gem path 
+        :param sn: set the serial number
+
+        """
         self.bgef_instance.toGem(filename, sn)
 
     def get_genedata_in_region(self, min_x, max_x, min_y, max_y, key):
@@ -245,11 +251,21 @@ cdef class BgefR:
         return np.asarray(gene_data)
 
     def get_offset(self):
+        """
+        Get the offset in bgef.
+
+        :return: [minx, miny]
+        """
         cdef int offval[2]
         self.bgef_instance.getOffset(offval)
         return offval[0], offval[1]
 	
     def get_exp_attr(self):
+        """
+        Get the bgef attr.
+        
+        :return: [minx, miny, maxx, maxy, maxexp, resolution]
+        """
         cdef int offval[6]
         self.bgef_instance.getExpAttr(offval)
         return offval[0], offval[1], offval[2], offval[3], offval[4], offval[5]

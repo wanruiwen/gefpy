@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+    Provides convenient drawing methods for other modules.
+"""
+
 import os
 import sys
 import numpy as np
@@ -28,6 +32,15 @@ from gefpy.utils import gef_is_cell_bin
 #     return cutoff
 
 def save_exp_heat_map(input_gef, output_png, scale=2, dpi=72):
+    """
+    Save bgef expression to heat map.
+
+    :param input_gef: set the input bgef path
+    :param output_png: set the out png path
+    :param scale: set the scale, default 2
+    :param dpi: set the dpi, default 72
+
+    """
     h5f = h5py.File(input_gef, 'r')
     if 'cellBin' in h5f:
         d_x = h5f['cellBin']['cell']['x']
@@ -71,6 +84,13 @@ def save_exp_heat_map(input_gef, output_png, scale=2, dpi=72):
 
 
 def cgef_stat(input_cgef, figpath):
+    """
+    Save cgef stat to png.
+
+    :param input_cgef: set the input bgef path
+    :param figpath: set the out png path
+
+    """
     b = 1
     scapath = os.path.join(figpath, "scatter_{0}x{0}_MID_gene_counts.png".format(b if b != 0 else "cell"))
     violinpath = os.path.join(figpath, "violin_{0}x{0}_MID_gene.png".format(b if b != 0 else "cell"))

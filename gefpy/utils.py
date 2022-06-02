@@ -1,14 +1,22 @@
-'''
-Author: zhaozijian
-Date: 2022-02-16 14:12:12
-LastEditors: zhaozijian
-LastEditTime: 2022-04-26 13:36:30
-Description: file content
-'''
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+    Provides convenient invocation methods for other modules.
+"""
+
 import h5py
 import numpy as np
 
 def gef_is_cell_bin(gef_file):
+    """
+    Determine if the file is a cgef file
+
+    :param gef_file: input the gef path
+
+    :return: the return True for cgef, False otherwise.
+    :rtype: bool
+    """
+
     h5f = h5py.File(gef_file)
     if 'cellBin' in h5f:
         h5f.close()
@@ -18,6 +26,16 @@ def gef_is_cell_bin(gef_file):
         return False
 
 def StereoDataToGef(path, bin, expression, gene, attr):
+    """
+    Write stereodata to cgef file
+
+    :param path: set the output path
+    :param bin: set the bin size
+    :param expression: input the expression data
+    :param gene: input the gene data
+    :param attr: input the attr data
+
+    """
     h5f = h5py.File(path,"w")
     geneExp = h5f.create_group("geneExp")
     binsz = "bin"+str(bin)
