@@ -19,17 +19,21 @@ cdef class CgefAdjust:
         self.c_instance = new cellAdjust()
 
     def __init__(self):
-        """
-        A class for reading cell bin GEF.
-
-        :param filepath: Input cell bin GEF filepath.
-        """
         pass
 
     def __dealloc__(self):
         del self.c_instance
 
     def get_cell_data(self, bgef, cgef):
+        """
+        Get raw cell data from cgef and bgef file.
+
+        :param bgef: the bgef file path
+        :param cgef: the cgef file path
+
+        :returns: (genelist, vec_cell)
+        """
+
         self.c_instance.readBgef(bgef)
         self.c_instance.readCgef(cgef)
         cdef vector[cellgem_label] vec_cell
@@ -38,6 +42,13 @@ cdef class CgefAdjust:
         return np.asarray(genelist), np.asarray(vec_cell)
 
     def write_cgef_adjustdata(self, path, celldata, dnbdata):
+        """
+        write the adjust cell data to cgef
+
+        :param path: set the Output path
+        :param celldata: input the cell data
+        :param dandata: input the dandata
+        """
         cdef Cell [:] cell = celldata
         cdef DnbExpression [:] dnb = dnbdata
         self.c_instance.writeCellAdjust(path, &cell[0], cell.shape[0], &dnb[0], dnb.shape[0])

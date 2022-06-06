@@ -19,7 +19,6 @@ def generate_cgef(cgef_file, bgef_file, mask_file, block_size: list):
     :param bgef_file: Input BGEF filepath.
     :param mask_file: Input make filepath.
     :param block_size: Block size.
-    :return:
     """
     cdef int[::1] bsize = np.array(block_size, dtype=np.int32)
     cdef char *rawstr = ""

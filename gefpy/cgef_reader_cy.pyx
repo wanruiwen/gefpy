@@ -73,6 +73,8 @@ cdef class CgefR:
     def get_cells(self):
         """
         Get cells.
+
+        :return: [cells]
         """
         data_format="""I:id:
         I:x:
@@ -99,6 +101,8 @@ cdef class CgefR:
     def get_genes(self):
         """
         Get genes.
+
+        :return: [genes]
         """
         data_format="""32s:geneName:
         I:offset:
@@ -120,7 +124,7 @@ cdef class CgefR:
         sparse.csr_matrix((count, indices, indptr), shape=(cell_num, gene_num))
 
         :param indices:  CSR format index array of the matrix. Cell id array, the column indices, is the same size as count.
-        :param indptr:   CSR format index pointer array of the matrix. indptr length = gene_num_ + 1 .
+        :param indptr:   CSR format index pointer array of the matrix. indptr length = gene_num + 1 .
         :param count:    CSR format data array of the matrix. Expression count.
         :param order:    Order of count, "gene" or "cell".
         :return: (indices, indptr, count, order)
@@ -155,12 +159,12 @@ cdef class CgefR:
     def restrict_region(self, min_x, max_x, min_y, max_y):
         """
         Restrict to the input region.
-        Some member variables (e.g. cell_num_) of this class will be updated.
+        Some member variables (e.g. cell_num) of this class will be updated.
 
-        :param min_x:
-        :param max_x:
-        :param min_y:
-        :param max_y:
+        :param min_x: set the minx
+        :param max_x: set the maxx
+        :param min_y: set the miny
+        :param max_y: set the maxy
         """
         self.cgef_instance.restrictRegion(min_x, max_x, min_y, max_y)
 
@@ -209,13 +213,16 @@ cdef class CgefR:
         return np.asarray(gene_id), np.asarray(count)
 
     def cgef_close(self):
+        """
+        Close the cgef.
+        """
         self.cgef_instance.closeH5()
 
     def get_cellborders(self):
         """
         Gets cell borders.
         
-        :return:  (borders)
+        :return:  [borders]
         """
         cdef unsigned int *ver = self.cgef_instance.getGefVer()
         cdef view.array borders

@@ -12,12 +12,9 @@
 #
 import os
 import sys
-from pathlib import Path
 import sphinx_rtd_theme
-# sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../'))
-HERE = Path(__file__).parent
-sys.path[:0] = [str(HERE.parent), str(HERE / 'extensions')]
+sys.path.insert(0, os.path.abspath('../gefpy'))
+sys.path.insert(0, os.path.abspath('..'))
 
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
@@ -25,11 +22,11 @@ on_rtd = os.environ.get('READTHEDOCS') == 'True'
 # -- Project information -----------------------------------------------------
 
 project = 'gefpy'
-copyright = '2022, Huang Zhibo'
-author = 'Huang Zhibo'
+copyright = '2022, zhaozijian'
+author = 'zhaozijian'
 
 # The full version, including alpha/beta/rc tags
-release = '0.5.2'
+release = '0.5.4.8'
 
 
 # -- General configuration ---------------------------------------------------
@@ -40,16 +37,11 @@ release = '0.5.2'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
-#    'sphinx.ext.doctest',
-#    'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
-#    'sphinx.ext.napoleon',
+    'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
-#    'nbsphinx',
-    "sphinx.ext.viewcode",
     "sphinx_autodoc_typehints",
     "sphinx_rtd_theme",
-#    *[p.stem for p in (HERE / 'extensions').glob('*.py')],
 ]
 #
 # Add any paths that contain templates here, relative to this directory.
@@ -65,21 +57,9 @@ autosummary_generate = True
 autodoc_member_order = 'bysource'
 autodoc_default_flags = ['members']
 todo_include_todos = False
-api_dir = HERE / 'api'  # function_images
+#api_dir = HERE / 'api'  # function_images
 # The master toctree document.
 language = None
 
 html_theme = 'sphinx_rtd_theme'
 
-# -- Options for HTML output -------------------------------------------------
-
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-#html_theme = 'alabaster'
-#html_theme = 'default'
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-#html_static_path = ['_static']

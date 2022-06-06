@@ -1,10 +1,3 @@
-'''
-Author: zhaozijian
-Date: 2022-02-11 10:19:08
-LastEditors: zhaozijian
-LastEditTime: 2022-03-18 14:37:19
-Description: file content
-'''
 # -*- coding: utf-8 -*-
 import h5py
 import numpy as np
