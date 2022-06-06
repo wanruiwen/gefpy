@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gefpy package &mdash; gefpy 0.5.4.8 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Release Notes" href="../release_note.html" />
+    <link rel="prev" title="Installation" href="../General/Installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> gefpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../General/Installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">gefpy package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gefpy.bgef_reader_cy">gefpy.bgef_reader_cy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gefpy.bgef_writer_cy">gefpy.bgef_writer_cy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gefpy.cell_exp_reader">gefpy.cell_exp_reader module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gefpy.cgef_adjust_cy">gefpy.cgef_adjust_cy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gefpy.cgef_reader_cy">gefpy.cgef_reader_cy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gefpy.cgef_writer_cy">gefpy.cgef_writer_cy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gefpy.plot">gefpy.plot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gefpy.utils">gefpy.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gefpy">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../release_note.html">Release Notes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">gefpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>gefpy package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/gefpy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gefpy-package">
+<h1>gefpy package<a class="headerlink" href="#gefpy-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-gefpy.bgef_reader_cy">
+<span id="gefpy-bgef-reader-cy-module"></span><h2>gefpy.bgef_reader_cy module<a class="headerlink" href="#module-gefpy.bgef_reader_cy" title="Permalink to this headline"></a></h2>
+<p>Provides access to the bgef_reader interface.
+For reading common bin GEF.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gefpy.bgef_reader_cy.</span></span><span class="sig-name descname"><span class="pre">BgefR</span></span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_cell_names">
+<span class="sig-name descname"><span class="pre">get_cell_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_cell_names" title="Permalink to this definition"></a></dt>
+<dd><p>Get an array of cell ids.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_cell_names2">
+<span class="sig-name descname"><span class="pre">get_cell_names2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_cell_names2" title="Permalink to this definition"></a></dt>
+<dd><p>Get an array of cell ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>cell_names</strong> – cell names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_cell_num">
+<span class="sig-name descname"><span class="pre">get_cell_num</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_cell_num" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of cell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_exp_attr">
+<span class="sig-name descname"><span class="pre">get_exp_attr</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_exp_attr" title="Permalink to this definition"></a></dt>
+<dd><p>Get the bgef attr.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[minx, miny, maxx, maxy, maxexp, resolution]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_exp_data">
+<span class="sig-name descname"><span class="pre">get_exp_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_exp_data" title="Permalink to this definition"></a></dt>
+<dd><p>Get sparse matrix indexes of expression data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(uniq_cell, cell_index, count)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_expression">
+<span class="sig-name descname"><span class="pre">get_expression</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_expression" title="Permalink to this definition"></a></dt>
+<dd><p>Get the all expression from bgef.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>exp</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_expression_num">
+<span class="sig-name descname"><span class="pre">get_expression_num</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_expression_num" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of expression.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_gene_data">
+<span class="sig-name descname"><span class="pre">get_gene_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_gene_data" title="Permalink to this definition"></a></dt>
+<dd><p>Get gene data.
+:return: (gene_index, gene_names)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_gene_names">
+<span class="sig-name descname"><span class="pre">get_gene_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_gene_names" title="Permalink to this definition"></a></dt>
+<dd><p>Get an array of gene names.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_gene_num">
+<span class="sig-name descname"><span class="pre">get_gene_num</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_gene_num" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of gene.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_genedata_in_region">
+<span class="sig-name descname"><span class="pre">get_genedata_in_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_genedata_in_region" title="Permalink to this definition"></a></dt>
+<dd><p>Get the gene exp matrix.
+:return: [x, y, umicnt]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_offset">
+<span class="sig-name descname"><span class="pre">get_offset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_offset" title="Permalink to this definition"></a></dt>
+<dd><p>Get the offset in bgef.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[minx, miny]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_sparse_matrix_indices">
+<span class="sig-name descname"><span class="pre">get_sparse_matrix_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_sparse_matrix_indices" title="Permalink to this definition"></a></dt>
+<dd><p>Gets indices for building csr_matrix.</p>
+<p>Examples:
+from scipy import sparse
+sparse.csr_matrix((count, indices, indptr), shape=(cell_num, gene_num))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indices</strong> – CSR format index array of the matrix. Cell id array, the column indices, is the same size as count.</p></li>
+<li><p><strong>indptr</strong> – CSR format index pointer array of the matrix. indptr length = gene_num + 1 .</p></li>
+<li><p><strong>count</strong> – CSR format data array of the matrix. Expression count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(indices, indptr, count)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_sparse_matrix_indices2">
+<span class="sig-name descname"><span class="pre">get_sparse_matrix_indices2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_sparse_matrix_indices2" title="Permalink to this definition"></a></dt>
+<dd><p>Gets indices for building csr_matrix.</p>
+<p>Examples:
+from scipy import sparse
+sparse.csr_matrix((count, cell_ind, gene_ind), shape=(cell_num, gene_num))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell_ind</strong> – CSR format index array of the matrix. same size as count.</p></li>
+<li><p><strong>gene_ind</strong> – CSR format index array of the matrix. same size as count.</p></li>
+<li><p><strong>count</strong> – CSR format data array of the matrix. Expression count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(cell_ind, gene_ind, count)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.get_whole_exp_matrix_shape">
+<span class="sig-name descname"><span class="pre">get_whole_exp_matrix_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.get_whole_exp_matrix_shape" title="Permalink to this definition"></a></dt>
+<dd><p>Get the shape of wholeExp matrix.
+:return: [rows, cols]</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.read_whole_exp_matrix">
+<span class="sig-name descname"><span class="pre">read_whole_exp_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.read_whole_exp_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Get wholeExp matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>offset_x</strong> – The starting position on the x-axis to be read.</p></li>
+<li><p><strong>offset_y</strong> – The starting position on the y-axis to be read.</p></li>
+<li><p><strong>rows</strong> – Number of rows to read.</p></li>
+<li><p><strong>cols</strong> – Number of cols to read.</p></li>
+<li><p><strong>key</strong> – MIDcount or genecount.</p></li>
+<li><p><strong>matrix</strong> – When the value is greater than 255, it will be set to 255.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.read_whole_exp_matrix_all">
+<span class="sig-name descname"><span class="pre">read_whole_exp_matrix_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.read_whole_exp_matrix_all" title="Permalink to this definition"></a></dt>
+<dd><p>Get wholeExp matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> – MIDcount or genecount.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>2D Matrix: When the value is greater than 255, it will be set to 255.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.bgef_reader_cy.BgefR.to_gem">
+<span class="sig-name descname"><span class="pre">to_gem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_reader_cy.BgefR.to_gem" title="Permalink to this definition"></a></dt>
+<dd><p>Convert bgef data to gem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – set out gem path</p></li>
+<li><p><strong>sn</strong> – set the serial number</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-gefpy.bgef_writer_cy">
+<span id="gefpy-bgef-writer-cy-module"></span><h2>gefpy.bgef_writer_cy module<a class="headerlink" href="#module-gefpy.bgef_writer_cy" title="Permalink to this headline"></a></h2>
+<p>Provides access to the bgef_writer interface.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="gefpy.bgef_writer_cy.generate_bgef">
+<span class="sig-prename descclassname"><span class="pre">gefpy.bgef_writer_cy.</span></span><span class="sig-name descname"><span class="pre">generate_bgef</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.bgef_writer_cy.generate_bgef" title="Permalink to this definition"></a></dt>
+<dd><p>Function to generate common bin GEF file(.bgef).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> – The input file path of gem file or bin1 bgef.</p></li>
+<li><p><strong>bgef_file</strong> – Output BGEF filepath.</p></li>
+<li><p><strong>n_thread</strong> – Number of thread, default 8</p></li>
+<li><p><strong>bin_sizes</strong> – A list of bin sizes, default: 1,10,20,50,100,200,500</p></li>
+<li><p><strong>region</strong> – A list of region, (minX, maxX, minY, maxY)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gefpy.cell_exp_reader">
+<span id="gefpy-cell-exp-reader-module"></span><h2>gefpy.cell_exp_reader module<a class="headerlink" href="#module-gefpy.cell_exp_reader" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="gefpy.cell_exp_reader.CellExpReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gefpy.cell_exp_reader.</span></span><span class="sig-name descname"><span class="pre">CellExpReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cell_exp_reader.CellExpReader" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-gefpy.cgef_adjust_cy">
+<span id="gefpy-cgef-adjust-cy-module"></span><h2>gefpy.cgef_adjust_cy module<a class="headerlink" href="#module-gefpy.cgef_adjust_cy" title="Permalink to this headline"></a></h2>
+<p>Provides access to the cgef_adjust interface.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="gefpy.cgef_adjust_cy.CgefAdjust">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gefpy.cgef_adjust_cy.</span></span><span class="sig-name descname"><span class="pre">CgefAdjust</span></span><a class="headerlink" href="#gefpy.cgef_adjust_cy.CgefAdjust" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_adjust_cy.CgefAdjust.get_cell_data">
+<span class="sig-name descname"><span class="pre">get_cell_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_adjust_cy.CgefAdjust.get_cell_data" title="Permalink to this definition"></a></dt>
+<dd><p>Get raw cell data from cgef and bgef file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bgef</strong> – the bgef file path</p></li>
+<li><p><strong>cgef</strong> – the cgef file path</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(genelist, vec_cell)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_adjust_cy.CgefAdjust.write_cgef_adjustdata">
+<span class="sig-name descname"><span class="pre">write_cgef_adjustdata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_adjust_cy.CgefAdjust.write_cgef_adjustdata" title="Permalink to this definition"></a></dt>
+<dd><p>write the adjust cell data to cgef</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – set the Output path</p></li>
+<li><p><strong>celldata</strong> – input the cell data</p></li>
+<li><p><strong>dandata</strong> – input the dandata</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-gefpy.cgef_reader_cy">
+<span id="gefpy-cgef-reader-cy-module"></span><h2>gefpy.cgef_reader_cy module<a class="headerlink" href="#module-gefpy.cgef_reader_cy" title="Permalink to this headline"></a></h2>
+<p>Provides access to the cgef_reader interface.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gefpy.cgef_reader_cy.</span></span><span class="sig-name descname"><span class="pre">CgefR</span></span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.cgef_close">
+<span class="sig-name descname"><span class="pre">cgef_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.cgef_close" title="Permalink to this definition"></a></dt>
+<dd><p>Close the cgef.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.free_restriction">
+<span class="sig-name descname"><span class="pre">free_restriction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.free_restriction" title="Permalink to this definition"></a></dt>
+<dd><p>Free restrict_region and restrict_gene.
+Must call this function before reuse restrict_*.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_cell_names">
+<span class="sig-name descname"><span class="pre">get_cell_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_cell_names" title="Permalink to this definition"></a></dt>
+<dd><p>Get an array of cell ids.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_cell_num">
+<span class="sig-name descname"><span class="pre">get_cell_num</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_cell_num" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of cell.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_cellborders">
+<span class="sig-name descname"><span class="pre">get_cellborders</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_cellborders" title="Permalink to this definition"></a></dt>
+<dd><p>Gets cell borders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[borders]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_cellid_and_count">
+<span class="sig-name descname"><span class="pre">get_cellid_and_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_cellid_and_count" title="Permalink to this definition"></a></dt>
+<dd><p>Gets cellId and count from the geneExp dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(cell_id, count)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_cells">
+<span class="sig-name descname"><span class="pre">get_cells</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_cells" title="Permalink to this definition"></a></dt>
+<dd><p>Get cells.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[cells]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_expression_num">
+<span class="sig-name descname"><span class="pre">get_expression_num</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_expression_num" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of expression.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_gene_names">
+<span class="sig-name descname"><span class="pre">get_gene_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_gene_names" title="Permalink to this definition"></a></dt>
+<dd><p>Get an array of gene names.
+The type of gene name is bytes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_gene_num">
+<span class="sig-name descname"><span class="pre">get_gene_num</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_gene_num" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of gene.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_geneid_and_count">
+<span class="sig-name descname"><span class="pre">get_geneid_and_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_geneid_and_count" title="Permalink to this definition"></a></dt>
+<dd><p>Gets geneId and count from the cellExp dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(gene_id, count)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_genes">
+<span class="sig-name descname"><span class="pre">get_genes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_genes" title="Permalink to this definition"></a></dt>
+<dd><p>Get genes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[genes]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_sparse_matrix_indices">
+<span class="sig-name descname"><span class="pre">get_sparse_matrix_indices</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_sparse_matrix_indices" title="Permalink to this definition"></a></dt>
+<dd><p>Gets indices for building csr_matrix.</p>
+<p>Examples:
+from scipy import sparse
+sparse.csr_matrix((count, indices, indptr), shape=(cell_num, gene_num))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>indices</strong> – CSR format index array of the matrix. Cell id array, the column indices, is the same size as count.</p></li>
+<li><p><strong>indptr</strong> – CSR format index pointer array of the matrix. indptr length = gene_num + 1 .</p></li>
+<li><p><strong>count</strong> – CSR format data array of the matrix. Expression count.</p></li>
+<li><p><strong>order</strong> – Order of count, “gene” or “cell”.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(indices, indptr, count, order)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.get_sparse_matrix_indices2">
+<span class="sig-name descname"><span class="pre">get_sparse_matrix_indices2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.get_sparse_matrix_indices2" title="Permalink to this definition"></a></dt>
+<dd><p>Gets indices for building csr_matrix.
+restrict_region and restrict_gene is “invalid” for this function.</p>
+<p>Examples:
+from scipy import sparse
+sparse.csr_matrix((count, cell_ind, gene_ind), shape=(cell_num, gene_num))</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell_ind</strong> – CSR format index array of the matrix. same size as count.</p></li>
+<li><p><strong>gene_ind</strong> – CSR format index array of the matrix. same size as count.</p></li>
+<li><p><strong>count</strong> – CSR format data array of the matrix. Expression count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(cell_ind, gene_ind, count)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.restrict_region">
+<span class="sig-name descname"><span class="pre">restrict_region</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.restrict_region" title="Permalink to this definition"></a></dt>
+<dd><p>Restrict to the input region.
+Some member variables (e.g. cell_num) of this class will be updated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_x</strong> – set the minx</p></li>
+<li><p><strong>max_x</strong> – set the maxx</p></li>
+<li><p><strong>min_y</strong> – set the miny</p></li>
+<li><p><strong>max_y</strong> – set the maxy</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="gefpy.cgef_reader_cy.CgefR.update_gene_info">
+<span class="sig-name descname"><span class="pre">update_gene_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_reader_cy.CgefR.update_gene_info" title="Permalink to this definition"></a></dt>
+<dd><p>Delete genes with zero expression after restrict_region.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-gefpy.cgef_writer_cy">
+<span id="gefpy-cgef-writer-cy-module"></span><h2>gefpy.cgef_writer_cy module<a class="headerlink" href="#module-gefpy.cgef_writer_cy" title="Permalink to this headline"></a></h2>
+<p>Provides access to the cgef_writer interface.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="gefpy.cgef_writer_cy.generate_cgef">
+<span class="sig-prename descclassname"><span class="pre">gefpy.cgef_writer_cy.</span></span><span class="sig-name descname"><span class="pre">generate_cgef</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.cgef_writer_cy.generate_cgef" title="Permalink to this definition"></a></dt>
+<dd><p>Generate cell bin GEF file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cgef_file</strong> – Output CGEF filepath.</p></li>
+<li><p><strong>bgef_file</strong> – Input BGEF filepath.</p></li>
+<li><p><strong>mask_file</strong> – Input make filepath.</p></li>
+<li><p><strong>block_size</strong> – Block size.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gefpy.plot">
+<span id="gefpy-plot-module"></span><h2>gefpy.plot module<a class="headerlink" href="#module-gefpy.plot" title="Permalink to this headline"></a></h2>
+<p>Provides convenient drawing methods for other modules.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="gefpy.plot.save_exp_heat_map">
+<span class="sig-prename descclassname"><span class="pre">gefpy.plot.</span></span><span class="sig-name descname"><span class="pre">save_exp_heat_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_gef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_png</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">72</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.plot.save_exp_heat_map" title="Permalink to this definition"></a></dt>
+<dd><p>Save bgef expression to heat map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_gef</strong> – set the input bgef path</p></li>
+<li><p><strong>output_png</strong> – set the out png path</p></li>
+<li><p><strong>scale</strong> – set the scale, default 2</p></li>
+<li><p><strong>dpi</strong> – set the dpi, default 72</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gefpy.plot.cgef_stat">
+<span class="sig-prename descclassname"><span class="pre">gefpy.plot.</span></span><span class="sig-name descname"><span class="pre">cgef_stat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_cgef</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figpath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.plot.cgef_stat" title="Permalink to this definition"></a></dt>
+<dd><p>Save cgef stat to png.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_cgef</strong> – set the input bgef path</p></li>
+<li><p><strong>figpath</strong> – set the out png path</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gefpy.utils">
+<span id="gefpy-utils-module"></span><h2>gefpy.utils module<a class="headerlink" href="#module-gefpy.utils" title="Permalink to this headline"></a></h2>
+<p>Provides convenient invocation methods for other modules.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="gefpy.utils.gef_is_cell_bin">
+<span class="sig-prename descclassname"><span class="pre">gefpy.utils.</span></span><span class="sig-name descname"><span class="pre">gef_is_cell_bin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gef_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.utils.gef_is_cell_bin" title="Permalink to this definition"></a></dt>
+<dd><p>Determine if the file is a cgef file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>gef_file</strong> – input the gef path</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the return True for cgef, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gefpy.utils.StereoDataToGef">
+<span class="sig-prename descclassname"><span class="pre">gefpy.utils.</span></span><span class="sig-name descname"><span class="pre">StereoDataToGef</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gefpy.utils.StereoDataToGef" title="Permalink to this definition"></a></dt>
+<dd><p>Write stereodata to cgef file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – set the output path</p></li>
+<li><p><strong>bin</strong> – set the bin size</p></li>
+<li><p><strong>expression</strong> – input the expression data</p></li>
+<li><p><strong>gene</strong> – input the gene data</p></li>
+<li><p><strong>attr</strong> – input the attr data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gefpy">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gefpy" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../General/Installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../release_note.html" class="btn btn-neutral float-right" title="Release Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, zhaozijian.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
