@@ -117,13 +117,16 @@ cdef class BgefR:
         # arr.astype(EXP_DTYPE)
         return np.asarray(exp)
 
-    #def get_reduce_expression(self):
-    #    cdef view.array exp = view.array((self.get_cell_num(),3),
-    #                                     itemsize=4*sizeof(char), format='I', allocate_buffer=False)
-    #    exp.data = <char*>self.bgef_instance.getReduceExpression()
+    def get_reduce_expression(self):
+        """
+        Get the reduce expression
+        """
+        cdef view.array exp = view.array((self.get_cell_num(),3),
+                                         itemsize=4*sizeof(char), format='I', allocate_buffer=False)
+        exp.data = <char*>self.bgef_instance.getReduceExpression()
         # arr = np.asarray(exp, dtype=EXP_DTYPE)
         # arr.astype(EXP_DTYPE)
-    #    return np.asarray(exp)
+        return np.asarray(exp)
 
     def get_sparse_matrix_indices(self):
         """

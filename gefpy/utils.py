@@ -44,16 +44,17 @@ def StereoDataToGef(path, bin, expression, gene, attr):
     #genetype = np.dtype({'names':['gene','offset','count'], 'formats':['S32', 'i','i']})
     #exptype = np.dtype({'names':['x','y','count'], 'formats':['i', 'i','i']})
 
-    geneExp[binsz]["expression"] = expression #np.arry([(10,20,2), (20,40,3)], dtype=exptype)
-    geneExp[binsz]["gene"] = gene #np.arry([("gene1",0,21), ("gene2",21,3)], dtype=genetype)
+    geneExp[binsz]["expression"] = expression #np.array([(10,20,2), (20,40,3)], dtype=exptype)
+    geneExp[binsz]["gene"] = gene #np.array([("gene1",0,21), ("gene2",21,3)], dtype=genetype)
 
-    bing["expression"].attrs.create("minX", attr[0])
-    bing["expression"].attrs.create("minY", attr[1])
-    bing["expression"].attrs.create("maxX", attr[2])
-    bing["expression"].attrs.create("maxY", attr[3])
-    bing["expression"].attrs.create("minExp", attr[4])
-    bing["expression"].attrs.create("resolution", attr[5])
+    bing["expression"].attrs.create("minX", attr[0], dtype=np.uint32)
+    bing["expression"].attrs.create("minY", attr[1], dtype=np.uint32)
+    bing["expression"].attrs.create("maxX", attr[2], dtype=np.uint32)
+    bing["expression"].attrs.create("maxY", attr[3], dtype=np.uint32)
+    bing["expression"].attrs.create("maxExp", attr[4], dtype=np.uint32)
+    bing["expression"].attrs.create("resolution", attr[5], dtype=np.uint32)
 
-    h5f.attrs.create("version", 2)
-    
+    h5f.attrs.create("version", 2, dtype=np.uint32)
+    ver=[0,6,4]
+    h5f.attrs.create("geftool_ver", ver, dtype=np.uint32)
     h5f.close()
