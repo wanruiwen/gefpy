@@ -81,6 +81,8 @@ class gefpy_build_ext(build_ext):
             settings['runtime_library_dirs'] = settings['library_dirs']
 
         extensions = [
+            Extension('gefpy.gene_exp_cy', [localpath('gefpy', 'gene_exp_cy.pyx')],
+                      **settings),
             Extension('gefpy.bgef_reader_cy', [localpath('gefpy', 'bgef_reader_cy.pyx')],
                       **settings),
             Extension('gefpy.bgef_writer_cy', [localpath('gefpy', 'bgef_writer_cy.pyx')],
