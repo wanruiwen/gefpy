@@ -110,7 +110,7 @@ cdef class BgefR:
 
         :return: exp
         """
-        cdef view.array exp = view.array((self.exp_len,3),
+        cdef view.array exp = view.array((self.exp_len,4),
                                          itemsize=4*sizeof(char), format='I', allocate_buffer=False)
         exp.data = <char*>self.bgef_instance.getExpression()
         # arr = np.asarray(exp, dtype=EXP_DTYPE)
@@ -121,7 +121,7 @@ cdef class BgefR:
         """
         Get the reduce expression
         """
-        cdef view.array exp = view.array((self.get_cell_num(),3),
+        cdef view.array exp = view.array((self.get_cell_num(),4),
                                          itemsize=4*sizeof(char), format='I', allocate_buffer=False)
         exp.data = <char*>self.bgef_instance.getReduceExpression()
         # arr = np.asarray(exp, dtype=EXP_DTYPE)
