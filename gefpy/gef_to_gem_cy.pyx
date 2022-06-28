@@ -9,10 +9,10 @@
 
 from .gef_to_gem cimport *
 
-cdef class CgefToGem:
+cdef class gefToGem:
     cdef geftogem *c_instance 
 
-    def __cinit__(self, strout, strsn, boutexon):
+    def __cinit__(self, strout, strsn, boutexon=True):
         """
         Init the instance.
 
@@ -23,7 +23,7 @@ cdef class CgefToGem:
 
         self.c_instance = new geftogem(strout, strsn, boutexon)
 
-    def __init__(self, strout, strsn, boutexon):
+    def __init__(self, strout, strsn, boutexon=True):
         pass
 
     def __dealloc__(self):
