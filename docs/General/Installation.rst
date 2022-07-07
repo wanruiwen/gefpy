@@ -1,6 +1,10 @@
 Installation
 ============
 
+.. note::
+    Our tool could be installed on Linux with python3.7 or python3.8.
+    
+
 Pre-built installation (recommended)
 ------------------------------------
 

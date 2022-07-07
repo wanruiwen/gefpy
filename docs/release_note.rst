@@ -3,10 +3,15 @@ Release Notes
 
 .. role:: small
 
-0.5.4.8 :2022-06-01
+0.5.5 :2022-06-28
+~~~~~~~~~~~~~~~~~~~~~~~~~
+- Generate cgem from cgef and bgef
+- add omics attribute
+- fix some bugs
+  
+0.5.4 :2022-06-01
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 - add cell adjust
-- add cgef to cgem
 - fix some bugs
 
 0.5.2 :2022-02-17

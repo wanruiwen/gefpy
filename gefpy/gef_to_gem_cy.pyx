@@ -48,3 +48,13 @@ cdef class gefToGem:
         """
 
         self.c_instance.cgeftogem(strcgef, strbgef)
+
+    def bgef2cgem(self, strmask, strbgef):
+        """
+        Create cgem file by mask and bgef.
+
+        :param strcgef: the mask file path
+        :param strbgef: the bgef file path
+        """
+
+        self.c_instance.bgeftocgem(strmask, strbgef)

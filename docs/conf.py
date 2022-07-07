@@ -15,7 +15,6 @@ import sys
 import sphinx_rtd_theme
 sys.path.insert(0, os.path.abspath('../gefpy'))
 sys.path.insert(0, os.path.abspath('..'))
-
 on_rtd = os.environ.get('READTHEDOCS') == 'True'
 
 
@@ -35,7 +34,7 @@ release = '0.5.4.8'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
+    #'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
     'sphinx.ext.napoleon',
@@ -59,7 +58,11 @@ autodoc_default_flags = ['members']
 todo_include_todos = False
 #api_dir = HERE / 'api'  # function_images
 # The master toctree document.
-language = None
+language = 'en'
 
 html_theme = 'sphinx_rtd_theme'
+html_static_path = ['static']
 
+html_css_files = [
+    'html.css',
+]

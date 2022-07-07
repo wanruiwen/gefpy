@@ -15,3 +15,4 @@ cdef extern from "geftogem.h" nogil:
         geftogem(const string &strout, const string &strsn, bool boutexon)
         void bgeftogem(const string &strbgef, int binsize)
         void cgeftogem(const string &strcgef, const string &strbgef)
+        void bgeftocgem(const string &strmask, const string &strbgef)
