@@ -46,8 +46,8 @@ cdef extern from "bgef_reader.h" nogil:
 
         unsigned int toGem(string & filename, string &sn)
         
-        void getGeneExpInRegion(unsigned int min_x,unsigned int min_y, unsigned int max_x, unsigned int max_y, 
-                                string &strgene, vector[Expression] &outExp);
+        void getfiltereddata(vector[int] &region, vector[string] &genelist, vector[string] &gene_names, 
+                            vector[unsigned long long] &uniq_cell, unsigned int *cell_ind, unsigned int *gene_ind, unsigned int *count)
         
         void getOffset(int *data)
         void getExpAttr(int *data)

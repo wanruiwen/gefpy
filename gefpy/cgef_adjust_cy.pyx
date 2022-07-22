@@ -52,3 +52,12 @@ cdef class CgefAdjust:
         cdef Cell [:] cell = celldata
         cdef DnbExpression [:] dnb = dnbdata
         self.c_instance.writeCellAdjust(path, &cell[0], cell.shape[0], &dnb[0], dnb.shape[0])
+
+    def create_Region_Bgef(self, inpath, outpath, pos):
+        cdef vector[vector[int]] vec
+        for t in pos:
+            vec.push_back(t)
+
+        self.c_instance.readBgef(inpath)
+        self.c_instance.getRegionGenedata(vec)
+        self.c_instance.createRegionGef(outpath)

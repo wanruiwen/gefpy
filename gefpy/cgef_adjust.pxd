@@ -26,3 +26,5 @@ cdef extern from "cellAdjust.h" nogil:
         void readCgef(const string &strinput)
         unsigned int getCellLabelgem(vector[string] &gene_list, vector[cellgem_label] &vecCellgem)
         void writeCellAdjust(const string &path, Cell *cellptr, unsigned int cellcnt, DnbExpression *dnbptr, unsigned int dnbcnt)
+        void createRegionGef(const string &strout)
+        void getRegionGenedata(vector[vector[int]] &vec)

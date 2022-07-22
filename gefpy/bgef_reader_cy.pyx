@@ -244,14 +244,22 @@ cdef class BgefR:
         """
         self.bgef_instance.toGem(filename, sn)
 
-    def get_genedata_in_region(self, min_x, max_x, min_y, max_y, key):
+    def get_filtered_data(self, region, genelist):
         """
         Get the gene exp matrix.
-        :return: [x, y, umicnt]
+        
         """
-        cdef vector[Expression] gene_data
-        self.bgef_instance.getGeneExpInRegion(min_x, max_x, min_y, max_y, key, gene_data)
-        return np.asarray(gene_data)
+        cdef unsigned int[::1] cell_ind = np.empty(self.exp_len, dtype=np.uint32)
+        cdef unsigned int[::1] gene_ind = np.empty(self.exp_len, dtype=np.uint32)
+        cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
+
+        cdef vector[string] gene_names
+        gene_names.reserve(self.gene_num)
+        cdef vector[unsigned long long] uniq_cell
+        uniq_cell.reserve(self.exp_len)
+
+        self.bgef_instance.getfiltereddata(region, genelist, gene_names, uniq_cell, &cell_ind[0], &gene_ind[0], &count[0])
+        return np.asarray(uniq_cell), np.asarray(gene_names), np.asarray(count), np.asarray(cell_ind), np.asarray(gene_ind) 
 
     def get_offset(self):
         """
