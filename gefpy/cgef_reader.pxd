@@ -58,3 +58,7 @@ cdef extern from "cgef_reader.h" nogil:
         
         unsigned int* getGefVer()
 
+        void getfiltereddata(vector[int] &region, vector[string] &genelist,
+                    vector[string] &vec_gene, vector[unsigned long long] &uniq_cells,
+                    vector[unsigned int] &cell_ind, vector[unsigned int] &gene_ind, vector[unsigned int] &count)
+

@@ -1,32 +1,55 @@
 import sys
 
 from gefpy.bgef_reader_cy import BgefR
+from gefpy.cgef_reader_cy import CgefR
 from gefpy.cgef_adjust_cy import CgefAdjust
 import numpy as np
 from scipy.sparse import csr_matrix
 
 def test1():
-    gef = BgefR("/ldfssz1/ST_BI/USER/stereopy/test/xujunhao/data/debug/zhangxiaoyu/TestData.gef", 100, 4)
-    gene_num = gef.get_gene_num()
-    offset_x, offset_y = gef.get_offset()
-    gef_attr = gef.get_exp_attr()
+    gef = BgefR("/ldfssz1/ST_BI/USER/stereopy/test/xujunhao/data/debug/zhangxiaoyu/TestData.gef", 1, 4)
+    region = [0,2000,0,2000]
+    gene=["Pharaoh_ant_13172","Pharaoh_ant_15152","ND-24","Pharaoh_ant_15157"]
 
-    uniq_cells, rows, count = gef.get_exp_data()
-    cell_num = len(uniq_cells)
+    uniq_cell, gene_names, count, cell_ind, gene_ind = gef.get_filtered_data(region,gene)
 
-    cols, uniq_genes = gef.get_gene_data()
-    position = np.array(list((zip(np.right_shift(uniq_cells, 32), np.bitwise_and(uniq_cells, 0xffff))))).astype('uint32')
+    gene_num = gene_names.size
+    cell_num = uniq_cell.size
 
-    exp_matrix = csr_matrix((count, (rows, cols)), shape=(cell_num, gene_num), dtype=np.uint32)
-    print("eok")
+    exp_matrix = csr_matrix((count, (cell_ind, gene_ind)), shape=(cell_num, gene_num), dtype=np.uint32)
+
+    position = np.array(list((zip(np.right_shift(uniq_cell, 32), np.bitwise_and(uniq_cell, 0xffff))))).astype('uint32')
+
+def test4():
+    gef = CgefR("/ldfssz1/ST_BI/USER/stereopy/test/xujunhao/data/debug/zhangxiaoyu/TestData.gef")
+    region = [0,2000,0,2000]
+    #gene=["Pharaoh_ant_13172","Pharaoh_ant_15152","ND-24","Pharaoh_ant_15157"]
+    gene=[]
+    uniq_cell, gene_names, count, cell_ind, gene_ind = gef.get_filtered_data(region,gene)
+
+    gene_num = gene_names.size
+    cell_num = uniq_cell.size
+    
+    exp_matrix = csr_matrix((count, (cell_ind, gene_ind)), shape=(cell_num, gene_num), dtype=np.uint32)
+
+    position = np.array(list((zip(np.right_shift(uniq_cell, 32), np.bitwise_and(uniq_cell, 0xffff))))).astype('uint32')
+
+
 
 def test2():
-    arry1 = [480,2680,520,2560,880,1680,920,1600,1200,1680,1320,1720,1800,1960,2120,3800,2120,3880,2000,3880,1240,3840,1000,3800,960,3760,600,3040,480,2760,480,2720]
-    arry2 = [2200,2680,2680,1560,2720,1480,3400,2280,3480,3280,3480,4040,3160,3720]
-    arry3 = [3960,2840,4280,1240,4360,1240,5200,1360,5360,1400,5400,1680,5520,2640,5520,2960,5480,3080,5320,3440,5120,3880,5080,3960,5040,4000,4840,4040,4280,4120,4120,4120,4080,3840,4000,3200]
-    dic = [arry1,arry2,arry3]
+    arry1 = [1160, 2600, 1640, 1400, 1680, 1320, 1760, 1240, 1960, 1080, 2280, 1080, 2920, 1160, 3120, 1200, 3520, 1440, 3640, 1520, 3720, 1600, 3880, 1880, 3920, 1960, 3920, 3600, 3880, 3640, 3320, 4160, 3000, 4240, 2800, 4280, 2600, 4280, 1760, 3920, 1600, 3840, 1560, 3800]
+    dic = [arry1]
     cg = CgefAdjust()
-    cg.create_Region_Bgef("/ldfssz1/ST_BI/USER/stereopy/test/panjie/stereopy/DP8400013846TR_F5.gef", "jfkldjl", dic)
+    cg.create_Region_Bgef("/ldfssz1/ST_BI/USER/stereopy/test/panjie/stereopy/DP8400013846TR_F5.gef", "kktest.bgef", dic)
+
+def test3():
+    from gefpy.bgef_writer_cy import generate_bgef
+    gem2 = '/ldfssz1/ST_BI/USER/stereopy/test/xujunhao/data/FP200000463BL_C4/FP200000463BL_C4.tissue.gem.gz'
+    gef2_file = 'test2.gef'
+    generate_bgef(gem2, gef2_file)
+    gem = '/ldfssz1/ST_BI/USER/stereopy/test/xujunhao/data/mouse_embroy_e12_5/E12.5_E1S3.gem.gz'
+    gef_file = 'test1.gef'
+    generate_bgef(gem, gef_file)
 
 if __name__ == "__main__":
     sys.exit(test2())

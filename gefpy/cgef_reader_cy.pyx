@@ -235,6 +235,17 @@ cdef class CgefR:
                                             itemsize=sizeof(short), format='h', allocate_buffer=False)
             borders.data = <char*>self.cgef_instance.getCellBorders_short(True, 0)
         return np.asarray(borders)
+
+    def get_filtered_data(self, region, genelist):
+
+        cdef vector[unsigned int] cell_ind
+        cdef vector[unsigned int] gene_ind
+        cdef vector[unsigned int] count
+        cdef vector[string] gene_names
+        cdef vector[unsigned long long] uniq_cell
+
+        self.cgef_instance.getfiltereddata(region, genelist, gene_names, uniq_cell, cell_ind, gene_ind, count)
+        return np.asarray(uniq_cell), np.asarray(gene_names), np.asarray(count), np.asarray(cell_ind), np.asarray(gene_ind) 
     
 
 

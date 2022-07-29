@@ -249,16 +249,13 @@ cdef class BgefR:
         Get the gene exp matrix.
         
         """
-        cdef unsigned int[::1] cell_ind = np.empty(self.exp_len, dtype=np.uint32)
-        cdef unsigned int[::1] gene_ind = np.empty(self.exp_len, dtype=np.uint32)
-        cdef unsigned int[::1] count = np.empty(self.exp_len, dtype=np.uint32)
-
+        cdef vector[unsigned int] cell_ind
+        cdef vector[unsigned int] gene_ind
+        cdef vector[unsigned int] count
         cdef vector[string] gene_names
-        gene_names.reserve(self.gene_num)
         cdef vector[unsigned long long] uniq_cell
-        uniq_cell.reserve(self.exp_len)
 
-        self.bgef_instance.getfiltereddata(region, genelist, gene_names, uniq_cell, &cell_ind[0], &gene_ind[0], &count[0])
+        self.bgef_instance.getfiltereddata(region, genelist, gene_names, uniq_cell, cell_ind, gene_ind, count)
         return np.asarray(uniq_cell), np.asarray(gene_names), np.asarray(count), np.asarray(cell_ind), np.asarray(gene_ind) 
 
     def get_offset(self):
