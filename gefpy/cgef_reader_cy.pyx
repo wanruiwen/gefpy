@@ -218,23 +218,16 @@ cdef class CgefR:
         """
         self.cgef_instance.closeH5()
 
-    def get_cellborders(self):
+    def get_cellborders(self, cellid):
         """
         Gets cell borders.
         
         :return:  [borders]
         """
-        cdef unsigned int *ver = self.cgef_instance.getGefVer()
-        cdef view.array borders
-        if ver[1]==6 and ver[2] < 3:
-            borders = view.array((self.cgef_instance.getCellNum(),16,2),
-                                            itemsize=sizeof(char), format='b', allocate_buffer=False)
-            borders.data = self.cgef_instance.getCellBorders_char(True, 0)
-        else:
-            borders = view.array((self.cgef_instance.getCellNum(),32,2),
-                                            itemsize=sizeof(short), format='h', allocate_buffer=False)
-            borders.data = <char*>self.cgef_instance.getCellBorders_short(True, 0)
-        return np.asarray(borders)
+        
+        cdef vector[short] borders
+        cdef cnt = self.cgef_instance.getCellBorders(cellid, borders)
+        return np.asarray(borders), cnt
 
     def get_filtered_data(self, region, genelist):
 

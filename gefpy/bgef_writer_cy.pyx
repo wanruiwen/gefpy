@@ -25,7 +25,8 @@ def generate_bgef(input_file, bgef_file, stromics="Transcriptomics", n_thread = 
     if bin_sizes is None:
         bin_sizes_tmp = {1, 10, 20, 50, 100, 200, 500}
     else:
-        bin_sizes_tmp.push_back(bin_sizes)
+        for i in bin_sizes:
+            bin_sizes_tmp.push_back(i)
 
     if region is None:
         generateBgef(input_file, bgef_file, stromics, n_thread, bin_sizes_tmp)

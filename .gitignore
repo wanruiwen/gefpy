@@ -139,3 +139,6 @@ main2.py
 .vscode
 /example_read_cgef.py
 /example_read_bgef.py
+exmple_plot.py
+tiff.py
+x2tif.py

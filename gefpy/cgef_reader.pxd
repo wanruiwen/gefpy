@@ -55,6 +55,7 @@ cdef extern from "cgef_reader.h" nogil:
 
         char* getCellBorders_char(bool ball, unsigned int cell_id)
         short* getCellBorders_short(bool ball, unsigned int cell_id)
+        int getCellBorders(vector[unsigned int] &cell_ind, vector[short] &border)
         
         unsigned int* getGefVer()
 
