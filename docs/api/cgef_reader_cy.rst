@@ -53,3 +53,18 @@ Provides access to the cgef_reader interface.
         
         :return: borders_list
 
+    .. py:method:: get_filtered_data(self, region, genelist)
+
+        Get the filtered data from cgef by region or gene.
+
+        :param region: rect region(minx,maxx,miny,maxy)
+        :param genelist: gene name list
+
+        + uniq_cell is list that save all cell, each cell val (exp.x<<32 | exp.y).
+        + gene_names is a list of gene names.
+        + count is a list that save the midcnt of each expression.
+        + cell_index is a list that save the cell idx of each expression.
+        + gene_index is a list that records the gene serial number corresponding to each exp.
+
+        :return: (uniq_cell, gene_names, count, cell_index, gene_index)
+

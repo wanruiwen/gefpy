@@ -12,5 +12,6 @@ Import gefpy model as::
     api/cgef_reader_cy
     api/cgef_writer_cy
     api/gef_to_gem_cy
+    api/bgef_creater_cy
     api/plot
     api/util

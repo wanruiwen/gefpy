@@ -28,7 +28,7 @@ Generate bgef
                   bgef_file=bgef_file,
                   stromics=stromics,
                   n_thread=8,
-                  bin_sizes=1,
+                  bin_sizes=bin_sizes,
                   region=region)
 
 Read bgef

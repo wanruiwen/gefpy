@@ -14,4 +14,4 @@ Provides access to the bgef_writer interface.
     :param stromics:    input the omics.
     :param n_thread:    Number of thread, default 8
     :param bin_sizes:   A list of bin sizes, default: 1,10,20,50,100,200,500
-    :param region:      A list of region, (minX, maxX, minY, maxY)
+    :param region:      A list of region (minX, maxX, minY, maxY)

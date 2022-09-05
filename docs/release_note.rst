@@ -3,6 +3,12 @@ Release Notes
 
 .. role:: small
 
+0.6.1 :2022-09-01
+~~~~~~~~~~~~~~~~~~~~~~~~~
+- add cgem to cgef api
+- add tisscuecut bgef api
+- fix some bugs
+
 0.5.5 :2022-06-28
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 - Generate cgem from cgef and bgef
