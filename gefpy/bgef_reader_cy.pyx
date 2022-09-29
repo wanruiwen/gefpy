@@ -234,15 +234,6 @@ cdef class BgefR:
         shape.data = <char *>self.bgef_instance.getWholeExpMatrixShape()
         return np.asarray(shape)
 
-    def to_gem(self, filename, sn):
-        """
-        Convert bgef data to gem
-
-        :param filename: set out gem path 
-        :param sn: set the serial number
-
-        """
-        self.bgef_instance.toGem(filename, sn)
 
     def get_filtered_data(self, region, genelist):
         """
@@ -257,6 +248,21 @@ cdef class BgefR:
 
         self.bgef_instance.getfiltereddata(region, genelist, gene_names, uniq_cell, cell_ind, gene_ind, count)
         return np.asarray(uniq_cell), np.asarray(gene_names), np.asarray(count), np.asarray(cell_ind), np.asarray(gene_ind) 
+
+    def get_filtered_data_exon(self, region, genelist):
+        """
+        Get the gene exp matrix.
+        
+        """
+        cdef vector[unsigned int] cell_ind
+        cdef vector[unsigned int] gene_ind
+        cdef vector[unsigned int] count
+        cdef vector[unsigned int] exon
+        cdef vector[string] gene_names
+        cdef vector[unsigned long long] uniq_cell
+
+        self.bgef_instance.getfiltereddata_exon(region, genelist, gene_names, uniq_cell, cell_ind, gene_ind, count, exon)
+        return np.asarray(uniq_cell), np.asarray(gene_names), np.asarray(count), np.asarray(cell_ind), np.asarray(gene_ind), np.asarray(exon)
 
     def get_offset(self):
         """
@@ -277,3 +283,6 @@ cdef class BgefR:
         cdef int offval[6]
         self.bgef_instance.getExpAttr(offval)
         return offval[0], offval[1], offval[2], offval[3], offval[4], offval[5]
+
+    def is_Contain_Exon(self):
+        return self.bgef_instance.isContainExon()

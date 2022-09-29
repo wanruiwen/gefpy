@@ -20,6 +20,12 @@ cdef extern from "cellAdjust.h" nogil:
         int midcnt
         unsigned int cellid
 
+    ctypedef struct sapBgefData:
+        unsigned short genecnt;
+        unsigned int midcnt;
+        int x;
+        int y;
+
     cdef cppclass cellAdjust:
         cellAdjust()
         void readBgef(const string &strinput)
@@ -28,3 +34,8 @@ cdef extern from "cellAdjust.h" nogil:
         void writeCellAdjust(const string &path, Cell *cellptr, unsigned int cellcnt, DnbExpression *dnbptr, unsigned int dnbcnt)
         void createRegionGef(const string &strout)
         void getRegionGenedata(vector[vector[int]] &vec)
+        void readRawCgef(const string &strcgef)
+        void getRegionCelldata(vector[vector[int]] &m_vecpos)
+        void writeToCgef(const string &outpath)
+
+        void getSapRegion(const string &strinput, int bin, int thcnt, vector[vector[int]] &vecpos, vector[sapBgefData] &vecdata)

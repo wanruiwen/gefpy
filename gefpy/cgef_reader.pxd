@@ -12,7 +12,7 @@ from .gef cimport *
 cdef extern from "cgef_reader.h" nogil:
     cdef cppclass CgefReader:
         CgefReader(const string &filename, bool verbose)
-        unsigned short getGeneNum() const;
+        unsigned int getGeneNum() const;
         unsigned int getCellNum() const;
         unsigned int getExpressionNum() const;
 
@@ -20,7 +20,7 @@ cdef extern from "cgef_reader.h" nogil:
 
         int getGeneId(string& gene_name)
         GeneData *getGene()
-        GeneData getGene(unsigned short gene_id) const
+        GeneData getGene(unsigned int gene_id) const
         CellData *getCell()
         CellData getCell(unsigned int cell_id) const
 
@@ -62,4 +62,11 @@ cdef extern from "cgef_reader.h" nogil:
         void getfiltereddata(vector[int] &region, vector[string] &genelist,
                     vector[string] &vec_gene, vector[unsigned long long] &uniq_cells,
                     vector[unsigned int] &cell_ind, vector[unsigned int] &gene_ind, vector[unsigned int] &count)
+
+        void getfiltereddata_exon(vector[int] &region, vector[string] &genelist,
+                    vector[string] &vec_gene, vector[unsigned long long] &uniq_cells,
+                    vector[unsigned int] &cell_ind, vector[unsigned int] &gene_ind, 
+                    vector[unsigned int] &count, vector[unsigned int] &exon)
+
+        bool isContainExon()
 

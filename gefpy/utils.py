@@ -58,3 +58,14 @@ def StereoDataToGef(path, bin, expression, gene, attr):
     ver=[0,6,4]
     h5f.attrs.create("geftool_ver", ver, dtype=np.uint32)
     h5f.close()
+
+def gef_contain_exon(gef_file):
+    h5f = h5py.File(gef_file)
+    if 'cellBin' in h5f: #cgef
+        if '/cellBin/cellExon' in h5f:
+            return True
+    else:
+        if '/geneExp/bin1/exon' in h5f:
+            return True
+
+    return False

@@ -61,3 +61,22 @@ cdef class CgefAdjust:
         self.c_instance.readBgef(inpath)
         self.c_instance.getRegionGenedata(vec)
         self.c_instance.createRegionGef(outpath)
+
+    def create_Region_Cgef(self, inpath, outpath, pos):
+        cdef vector[vector[int]] vec
+        for t in pos:
+            vec.push_back(t)
+        
+        self.c_instance.getRegionCelldata(vec)
+        self.c_instance.readRawCgef(inpath)
+        self.c_instance.writeToCgef(outpath)
+
+    def get_regiondata_frombgef(self, inpath, bin, thcnt, pos):
+        cdef vector[vector[int]] vec
+        for t in pos:
+            vec.push_back(t)
+
+        cdef vector[sapBgefData] vecdata
+        self.c_instance.getSapRegion(inpath, bin, thcnt, vec, vecdata)
+        return np.asarray(vecdata)
+        

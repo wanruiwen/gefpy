@@ -240,5 +240,18 @@ cdef class CgefR:
         self.cgef_instance.getfiltereddata(region, genelist, gene_names, uniq_cell, cell_ind, gene_ind, count)
         return np.asarray(uniq_cell), np.asarray(gene_names), np.asarray(count), np.asarray(cell_ind), np.asarray(gene_ind) 
     
+    def get_filtered_data_exon(self, region, genelist):
 
+        cdef vector[unsigned int] cell_ind
+        cdef vector[unsigned int] gene_ind
+        cdef vector[unsigned int] count
+        cdef vector[unsigned int] exon
+        cdef vector[string] gene_names
+        cdef vector[unsigned long long] uniq_cell
+
+        self.cgef_instance.getfiltereddata_exon(region, genelist, gene_names, uniq_cell, cell_ind, gene_ind, count, exon)
+        return np.asarray(uniq_cell), np.asarray(gene_names), np.asarray(count), np.asarray(cell_ind), np.asarray(gene_ind), np.asarray(exon)
+
+    def is_Contain_Exon(self):
+        return self.cgef_instance.isContainExon()
 

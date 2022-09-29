@@ -44,11 +44,17 @@ cdef extern from "bgef_reader.h" nogil:
         void readWholeExpMatrix(string & key,
                                 unsigned char *matrix)
 
-        unsigned int toGem(string & filename, string &sn)
         
         void getfiltereddata(vector[int] &region, vector[string] &genelist, 
                             vector[string] &gene_names, vector[unsigned long long] &uniq_cell, 
-                            vector[unsigned int] &cell_ind, vector[unsigned int] &gene_ind, vector[unsigned int] &count)
+                            vector[unsigned int] &cell_ind, vector[unsigned int] &gene_ind, 
+                            vector[unsigned int] &count)
+
+        void getfiltereddata_exon(vector[int] &region, vector[string] &genelist, 
+                            vector[string] &gene_names, vector[unsigned long long] &uniq_cell, 
+                            vector[unsigned int] &cell_ind, vector[unsigned int] &gene_ind, 
+                            vector[unsigned int] &count, vector[unsigned int] &exon)
         
         void getOffset(int *data)
         void getExpAttr(int *data)
+        bool isContainExon()
