@@ -49,7 +49,7 @@ cdef extern from "cgef_reader.h" nogil:
 
         void getCellIdAndCount(unsigned int *cell_id, unsigned short *count) const
 
-        void getGeneIdAndCount(unsigned short *gene_id, unsigned short *count) const
+        void getGeneIdAndCount(unsigned int *gene_id, unsigned short *count) const
 
         void closeH5()
 

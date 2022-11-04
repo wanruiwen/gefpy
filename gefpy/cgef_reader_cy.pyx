@@ -207,7 +207,7 @@ cdef class CgefR:
         
         :return:  (gene_id, count)
         """
-        cdef unsigned short[::1] gene_id = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint16)
+        cdef unsigned int[::1] gene_id = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint32)
         cdef unsigned short[::1] count = np.empty(self.cgef_instance.getExpressionNum(), dtype=np.uint16)
         self.cgef_instance.getGeneIdAndCount(&gene_id[0], &count[0])
         return np.asarray(gene_id), np.asarray(count)
